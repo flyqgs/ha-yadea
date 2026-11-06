@@ -7,3 +7,4 @@ yadea_token.json
 .DS_Store
 views-dark.yaml
 gen_dark_views.py
+merge_dark_views.py
