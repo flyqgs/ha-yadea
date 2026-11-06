@@ -12,7 +12,7 @@ views:
         cards:
           - type: picture
             title: 白鲨Ⅱ-G PRO
-            entity: image.bai_sha_ii_g
+            image_entity: image.bai_sha_ii_g
           - type: horizontal-stack
             cards:
               - type: gauge
@@ -37,18 +37,15 @@ views:
                 needle: false
           - type: horizontal-stack
             cards:
-              - type: statistic
+              - type: entity
                 entity: sensor.bai_sha_ii_g_mileage_this_month
                 name: 本月里程 (km)
-                stat_type: max
-              - type: statistic
+              - type: entity
                 entity: sensor.bai_sha_ii_g_total_mileage
                 name: 累计里程 (km)
-                stat_type: max
-              - type: statistic
+              - type: entity
                 entity: sensor.bai_sha_ii_g_total_co2_saved
                 name: 碳减排 (kg)
-                stat_type: max
           - type: entities
             title: 能耗与状态
             entities:
@@ -68,7 +65,7 @@ views:
         cards:
           - type: picture
             title: 冠能龙霆70 都市劲享版
-            entity: image.long_ting_70_y_g
+            image_entity: image.long_ting_70_y_g
           - type: horizontal-stack
             cards:
               - type: gauge
@@ -93,18 +90,15 @@ views:
                 needle: false
           - type: horizontal-stack
             cards:
-              - type: statistic
+              - type: entity
                 entity: sensor.long_ting_70_y_g_mileage_this_month
                 name: 本月里程 (km)
-                stat_type: max
-              - type: statistic
+              - type: entity
                 entity: sensor.long_ting_70_y_g_total_mileage
                 name: 累计里程 (km)
-                stat_type: max
-              - type: statistic
+              - type: entity
                 entity: sensor.long_ting_70_y_g_total_co2_saved
                 name: 碳减排 (kg)
-                stat_type: max
           - type: entities
             title: 能耗与状态
             entities:
