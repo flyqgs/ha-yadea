@@ -41,6 +41,8 @@
 需 [card-mod](https://github.com/thomasloven/lovelace-card-mod)）。
 复制到自定义仪表盘并替换实体 ID 即可。
 
+![旗舰版预览](docs/pro-view-preview.png)
+
 设备页会显示车辆官方图片（`imgUrl`）。
 
 ### ⚠️ 关于账号互踢（重要）
