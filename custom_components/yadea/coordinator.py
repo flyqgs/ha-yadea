@@ -34,6 +34,7 @@ class YadeaCoordinator(DataUpdateCoordinator[dict]):
             LOGGER,
             name=DOMAIN,
             update_interval=interval,
+            config_entry=entry,  # required since HA 2025.11
         )
         self.entry = entry
         self.api = api
