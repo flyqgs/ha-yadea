@@ -640,3 +640,283 @@ views:
           left: 2%
           transform: translate(0, -50%)
         prefix: '上报 '
+- title: 进阶版
+  path: advanced
+  icon: mdi:auto-fix
+  type: sections
+  max_columns: 2
+  sections:
+  - type: grid
+    cards:
+    - type: custom:mushroom-template-card
+      primary: 白鲨Ⅱ-G PRO
+      secondary: 电量 {{ states('sensor.bai_sha_ii_g_battery') }}% · 续航 {{ states('sensor.bai_sha_ii_g_remaining_range') }} km
+      icon: mdi:motorbike-electric
+      icon_color: blue
+      tap_action:
+        action: more-info
+        entity: sensor.bai_sha_ii_g_battery
+      card_mod:
+        style: "ha-card {\n  border: none;\n  min-height: 148px;\n  padding: 14px 18px;\n  border-radius: 20px;\n  overflow: hidden;\n  background: linear-gradient(90deg, rgba(10,18,32,0.96) 0%, rgba(10,18,32,0.72)\
+          \ 42%, rgba(10,18,32,0.18) 100%), url(\"https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png\") right center / contain no-repeat, linear-gradient(135deg, #1e293b,\
+          \ #0b1220);\n  box-shadow: 0 10px 28px rgba(2,6,23,0.35);\n}\nha-card .primary {\n  color: #ffffff;\n  font-weight: 700;\n  font-size: 1.12rem;\n  letter-spacing: 0.3px;\n}\nha-card .secondary\
+          \ {\n  color: rgba(226,232,240,0.86);\n  font-size: 0.92rem;\n}\nha-card mushroom-shape-icon {\n  --icon-size: 46px;\n  background: rgba(59,130,246,0.25) !important;\n}\nha-card .icon {\n  color:\
+          \ #7dd3fc !important;\n}\n"
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: template
+        icon: mdi:battery-high
+        icon_color: green
+        content: '{{ states(''sensor.bai_sha_ii_g_battery'') }}%'
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_battery
+      - type: template
+        icon: mdi:map-marker-distance
+        icon_color: blue
+        content: '{{ states(''sensor.bai_sha_ii_g_remaining_range'') }} km'
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_remaining_range
+      - type: template
+        icon: mdi:road-variant
+        icon_color: purple
+        content: 本月 {{ states('sensor.bai_sha_ii_g_mileage_this_month') }} km
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_mileage_this_month
+      - type: template
+        icon: mdi:leaf
+        icon_color: light-green
+        content: '{{ states(''sensor.bai_sha_ii_g_total_co2_saved'') }} kg'
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_total_co2_saved
+      alignment: start
+      card_mod:
+        style: 'ha-card { padding: 2px 0 0; }'
+    - type: custom:mini-graph-card
+      name: 电量趋势 · 近7天
+      icon: mdi:chart-line
+      entities:
+      - entity: sensor.bai_sha_ii_g_battery
+        name: 电量
+      hours_to_show: 168
+      points_per_hour: 0.25
+      line_width: 3
+      font_size: 90
+      animate: true
+      show:
+        labels: true
+        icons: true
+        extrema: true
+        fill: fade
+      color_thresholds:
+      - value: 20
+        color: '#ef4444'
+      - value: 50
+        color: '#f59e0b'
+      - value: 101
+        color: '#22c55e'
+      card_mod:
+        style: 'ha-card { border-radius: 20px; }'
+    - type: heading
+      heading: 能耗
+      icon: mdi:transmission-tower
+      heading_style: subtitle
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: template
+        icon: mdi:lightning-bolt
+        icon_color: amber
+        content: 昨充 {{ states('sensor.bai_sha_ii_g_yesterday_charge') }}
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_yesterday_charge
+      - type: template
+        icon: mdi:plug
+        icon_color: deep-orange
+        content: 昨用 {{ states('sensor.bai_sha_ii_g_yesterday_consumption') }}
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_yesterday_consumption
+      - type: template
+        icon: mdi:calendar-week
+        icon_color: teal
+        content: 7天充 {{ states('sensor.bai_sha_ii_g_7_day_charge') }}
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_7_day_charge
+      - type: template
+        icon: mdi:calendar-week-outline
+        icon_color: cyan
+        content: 7天用 {{ states('sensor.bai_sha_ii_g_7_day_consumption') }}
+        tap_action:
+          action: more-info
+          entity: sensor.bai_sha_ii_g_7_day_consumption
+      alignment: start
+      card_mod:
+        style: 'ha-card { padding: 0; }'
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: sensor.bai_sha_ii_g_battery_count
+        name: 电池数
+        icon: mdi:battery-multiple
+        icon_color: grey
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
+      - type: custom:mushroom-entity-card
+        entity: sensor.bai_sha_ii_g_iot_days_remaining
+        name: 物联卡
+        icon: mdi:sim
+        icon_color: amber
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
+      - type: custom:mushroom-entity-card
+        entity: sensor.bai_sha_ii_g_iot_card_expires
+        name: 到期日
+        icon: mdi:calendar-clock
+        icon_color: blue-grey
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
+  - type: grid
+    cards:
+    - type: custom:mushroom-template-card
+      primary: 冠能龙霆70
+      secondary: 电量 {{ states('sensor.long_ting_70_y_g_battery') }}% · 续航 {{ states('sensor.long_ting_70_y_g_remaining_range') }} km
+      icon: mdi:motorbike-electric
+      icon_color: blue
+      tap_action:
+        action: more-info
+        entity: sensor.long_ting_70_y_g_battery
+      card_mod:
+        style: "ha-card {\n  border: none;\n  min-height: 148px;\n  padding: 14px 18px;\n  border-radius: 20px;\n  overflow: hidden;\n  background: linear-gradient(90deg, rgba(10,18,32,0.96) 0%, rgba(10,18,32,0.72)\
+          \ 42%, rgba(10,18,32,0.18) 100%), url(\"https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png\") right center / contain no-repeat, linear-gradient(135deg, #1e293b,\
+          \ #0b1220);\n  box-shadow: 0 10px 28px rgba(2,6,23,0.35);\n}\nha-card .primary {\n  color: #ffffff;\n  font-weight: 700;\n  font-size: 1.12rem;\n  letter-spacing: 0.3px;\n}\nha-card .secondary\
+          \ {\n  color: rgba(226,232,240,0.86);\n  font-size: 0.92rem;\n}\nha-card mushroom-shape-icon {\n  --icon-size: 46px;\n  background: rgba(59,130,246,0.25) !important;\n}\nha-card .icon {\n  color:\
+          \ #7dd3fc !important;\n}\n"
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: template
+        icon: mdi:battery-high
+        icon_color: green
+        content: '{{ states(''sensor.long_ting_70_y_g_battery'') }}%'
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_battery
+      - type: template
+        icon: mdi:map-marker-distance
+        icon_color: blue
+        content: '{{ states(''sensor.long_ting_70_y_g_remaining_range'') }} km'
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_remaining_range
+      - type: template
+        icon: mdi:road-variant
+        icon_color: purple
+        content: 本月 {{ states('sensor.long_ting_70_y_g_mileage_this_month') }} km
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_mileage_this_month
+      - type: template
+        icon: mdi:leaf
+        icon_color: light-green
+        content: '{{ states(''sensor.long_ting_70_y_g_total_co2_saved'') }} kg'
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_total_co2_saved
+      alignment: start
+      card_mod:
+        style: 'ha-card { padding: 2px 0 0; }'
+    - type: custom:mini-graph-card
+      name: 电量趋势 · 近7天
+      icon: mdi:chart-line
+      entities:
+      - entity: sensor.long_ting_70_y_g_battery
+        name: 电量
+      hours_to_show: 168
+      points_per_hour: 0.25
+      line_width: 3
+      font_size: 90
+      animate: true
+      show:
+        labels: true
+        icons: true
+        extrema: true
+        fill: fade
+      color_thresholds:
+      - value: 20
+        color: '#ef4444'
+      - value: 50
+        color: '#f59e0b'
+      - value: 101
+        color: '#22c55e'
+      card_mod:
+        style: 'ha-card { border-radius: 20px; }'
+    - type: heading
+      heading: 能耗
+      icon: mdi:transmission-tower
+      heading_style: subtitle
+    - type: custom:mushroom-chips-card
+      chips:
+      - type: template
+        icon: mdi:lightning-bolt
+        icon_color: amber
+        content: 昨充 {{ states('sensor.long_ting_70_y_g_yesterday_charge') }}
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_yesterday_charge
+      - type: template
+        icon: mdi:plug
+        icon_color: deep-orange
+        content: 昨用 {{ states('sensor.long_ting_70_y_g_yesterday_consumption') }}
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_yesterday_consumption
+      - type: template
+        icon: mdi:calendar-week
+        icon_color: teal
+        content: 7天充 {{ states('sensor.long_ting_70_y_g_7_day_charge') }}
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_7_day_charge
+      - type: template
+        icon: mdi:calendar-week-outline
+        icon_color: cyan
+        content: 7天用 {{ states('sensor.long_ting_70_y_g_7_day_consumption') }}
+        tap_action:
+          action: more-info
+          entity: sensor.long_ting_70_y_g_7_day_consumption
+      alignment: start
+      card_mod:
+        style: 'ha-card { padding: 0; }'
+    - type: horizontal-stack
+      cards:
+      - type: custom:mushroom-entity-card
+        entity: sensor.long_ting_70_y_g_battery_count
+        name: 电池数
+        icon: mdi:battery-multiple
+        icon_color: grey
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
+      - type: custom:mushroom-entity-card
+        entity: sensor.long_ting_70_y_g_iot_days_remaining
+        name: 物联卡
+        icon: mdi:sim
+        icon_color: amber
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
+      - type: custom:mushroom-entity-card
+        entity: sensor.long_ting_70_y_g_iot_card_expires
+        name: 到期日
+        icon: mdi:calendar-clock
+        icon_color: blue-grey
+        layout: vertical
+        card_mod:
+          style: 'ha-card { border-radius: 16px; }'
