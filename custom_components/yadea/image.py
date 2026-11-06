@@ -52,9 +52,11 @@ class YadeaVehicleImage(ImageEntity):
         """Fetch the picture once added.
 
         The Yadea CDN serves the PNG with Content-Type
-        ``application/octet-stream``; the stock ``async_load_image_from_url``
-        helper silently rejects non ``image/*`` responses, so we download
-        manually and sniff the magic bytes instead.
+        ``application/octet-stream``, so official URL loaders reject it.
+        We download manually, sniff the magic bytes and store the result
+        in BOTH attribute layouts: the legacy ``_image``/``_content_type``
+        (HA <= 2025.x) and the ``_cached_image`` Image dataclass
+        (HA 2026.x refactor) - whichever applies is picked up by core.
         """
         await super().async_added_to_hass()
         if not self._url:
@@ -66,10 +68,25 @@ class YadeaVehicleImage(ImageEntity):
             is_png = data[:4] == b"\x89PNG"
             is_jpeg = data[:3] == b"\xff\xd8\xff"
             if resp.status == 200 and (is_png or is_jpeg):
+                content_type = "image/png" if is_png else "image/jpeg"
+                # New-style cache (components/image/entity.py refactor)
+                try:
+                    from homeassistant.components.image.entity import Image
+
+                    self._cached_image = Image(
+                        content_type=content_type, content=data
+                    )
+                except ImportError:
+                    pass
+                # Legacy attributes
                 self._image = data
-                self._content_type = "image/png" if is_png else "image/jpeg"
+                self._content_type = content_type
+                self._attr_content_type = content_type
                 self._attr_image_last_updated = dt_util.utcnow()
                 self.async_write_ha_state()
+                LOGGER.info(
+                    "车辆图片加载成功 (%s): %d bytes %s", self.vin, len(data), content_type
+                )
             else:
                 LOGGER.warning(
                     "车辆图片响应异常 (%s): http=%s bytes=%s", self.vin, resp.status, len(data)
