@@ -1,0 +1,78 @@
+# 雅迪电动车仪表盘示例（纯核心卡片，无需 HACS）
+# 用法：HA 网页 → 编辑仪表盘 → 右上角"⋯" → 编辑为 YAML → 粘贴本文件内容
+# ⚠️ 把下面 entity 里的 xxx 替换成你自己的实体 ID（在"实体"页面搜索"电量/里程"即可找到）
+
+type: vertical-stack
+cards:
+  # ── 车 1 ──────────────────────────────────────────
+  - type: picture-glance
+    title: 白鲨Ⅱ-G PRO
+    entities:
+      - entity: sensor.bai_sha_ii_g_battery        # 换成你的电量实体
+        name: 电量
+      - entity: sensor.bai_sha_ii_g_remaining_range
+        name: 剩余里程
+      - entity: sensor.bai_sha_ii_g_month_mileage
+        name: 本月里程
+    state_image:
+      # 有图片实体后可直接用：
+      # image: image.bai_sha_ii_g_vehicle_picture
+      - >-
+        https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png
+
+  - type: horizontal-stack
+    cards:
+      - type: gauge
+        entity: sensor.bai_sha_ii_g_battery        # 换成你的电量实体
+        name: 电量
+        min: 0
+        max: 100
+        severity:
+          green: 50
+          yellow: 20
+          red: 0
+        needle: false
+      - type: statistic
+        entity: sensor.bai_sha_ii_g_remaining_range
+        name: 剩余续航 (km)
+        stat_type: max
+
+  - type: horizontal-stack
+    cards:
+      - type: statistic
+        entity: sensor.bai_sha_ii_g_month_mileage
+        name: 本月里程 (km)
+      - type: statistic
+        entity: sensor.bai_sha_ii_g_total_mileage
+        name: 累计里程 (km)
+      - type: statistic
+        entity: sensor.bai_sha_ii_g_total_co2_saved
+        name: 碳减排 (kg)
+
+  # ── 车 2（同样格式，复制一份改实体）────────────────
+  # - type: picture-glance
+  #   title: 龙霆70
+  #   entities:
+  #     - sensor.long_ting_70_battery
+  #     - sensor.long_ting_70_remaining_range
+  #   state_image:
+  #     - >-
+  #       https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png
+
+# 进阶：安装 HACS 的 card-mod / stack-in-card / mushroom 后，
+# 可以把电量做成环形进度、把车辆图做全幅背景。示例：
+#
+# - type: custom:mushroom-template-card
+#   primary: 白鲨Ⅱ
+#   secondary: >-
+#     电量 {{ states('sensor.bai_sha_ii_g_battery') }}% ·
+#     续航 {{ states('sensor.bai_sha_ii_g_remaining_range') }} km
+#   picture: >-
+#     https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png
+#   card_mod:
+#     style: |
+#       ha-card {
+#         background: linear-gradient(135deg, #1a1a2e, #16213e);
+#         color: white;
+#         border-radius: 20px;
+#       }

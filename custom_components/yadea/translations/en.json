@@ -45,6 +45,9 @@
       "daily_charge": {"name": "Yesterday charge"},
       "weekly_consume": {"name": "7-day consumption"},
       "weekly_charge": {"name": "7-day charge"}
+    },
+    "image": {
+      "vehicle_image": {"name": "Vehicle picture"}
     }
   }
 }

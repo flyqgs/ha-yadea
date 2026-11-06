@@ -28,6 +28,15 @@
 | 累计里程 (total_mileage) | km | `total-mileage/calc/co2` |
 | 累计碳减排 (total_co2) | kg（附 kgPerKm 属性） | `total-mileage/calc/co2` |
 | 近7天每日里程 (daily_mileage) | 诊断实体，7 天合计 km + 逐日列表属性 | `track-ride-meter/summary type=1`（仅 App 记录过骑行才有数据） |
+
+此外每台车还有一个 **图片实体 (image)**：车辆官方车型图（`imgUrl`），
+可直接用于仪表盘的图片卡片。
+
+### 仪表盘美化示例
+
+仓库里的 [`dashboard-example.yaml`](dashboard-example.yaml) 是一份纯核心卡片
+（无需 HACS）的电动车仪表盘：车辆图 + 电量表盘 + 里程统计，
+复制到自定义仪表盘（YAML 模式）并替换实体 ID 即可。
 | 昨日用电 / 昨日充电 | kWh | 每日用电统计 |
 | 近7天用电 / 近7天充电 | kWh（7 天合计，附逐日明细属性） | 每日用电统计 ×7 |
 

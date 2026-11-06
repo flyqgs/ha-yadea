@@ -16,4 +16,4 @@ USER_AGENT = "YadeaApp/7.3.0"
 
 CODE_OK = "000000"
 
-PLATFORMS = ["sensor"]
+PLATFORMS = ["sensor", "image"]

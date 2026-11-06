@@ -45,6 +45,9 @@
       "daily_charge": {"name": "昨日充电"},
       "weekly_consume": {"name": "近7天用电"},
       "weekly_charge": {"name": "近7天充电"}
+    },
+    "image": {
+      "vehicle_image": {"name": "车辆图片"}
     }
   }
 }
