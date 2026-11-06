@@ -1,159 +1,331 @@
-# 雅迪电动车仪表盘（已填入你账号的真实实体 ID，可直接使用）
-# 使用：HA 概览页 → 右上角"⋯" → 编辑仪表盘 → "⋯" → 用 YAML 编辑 → 全部替换为本文件内容
-# 或：设置 → 仪表盘 → 添加仪表盘 → 打开后"⋯" → 用 YAML 编辑 → 粘贴
-
+# 雅迪电动车仪表盘 - 3 套视图方案：总览·经典 / 精简总览（原生磁贴）/ 状态速览（Markdown 浓缩）
 title: 雅迪电动车
 views:
-  - title: 车辆总览
-    path: yadea
+- title: 总览 · 经典
+  path: classic
+  cards:
+  - type: vertical-stack
     cards:
-      # ══════════ 白鲨Ⅱ-G PRO ══════════
-      - type: vertical-stack
-        cards:
-          - type: picture
-            title: 白鲨Ⅱ-G PRO
-            image_entity: image.bai_sha_ii_g
-          - type: horizontal-stack
-            cards:
-              - type: gauge
-                entity: sensor.bai_sha_ii_g_battery
-                name: 电量
-                min: 0
-                max: 100
-                severity:
-                  green: 50
-                  yellow: 20
-                  red: 0
-                needle: false
-              - type: gauge
-                entity: sensor.bai_sha_ii_g_remaining_range
-                name: 续航 (km)
-                min: 0
-                max: 200
-                severity:
-                  green: 100
-                  yellow: 50
-                  red: 0
-                needle: false
-          - type: horizontal-stack
-            cards:
-              - type: entity
-                entity: sensor.bai_sha_ii_g_mileage_this_month
-                name: 本月里程 (km)
-              - type: entity
-                entity: sensor.bai_sha_ii_g_total_mileage
-                name: 累计里程 (km)
-              - type: entity
-                entity: sensor.bai_sha_ii_g_total_co2_saved
-                name: 碳减排 (kg)
-          - type: entities
-            title: 能耗与状态
-            entities:
-              - entity: sensor.bai_sha_ii_g_yesterday_charge
-                name: 昨日充电 (kWh)
-              - entity: sensor.bai_sha_ii_g_yesterday_consumption
-                name: 昨日用电 (kWh)
-              - entity: sensor.bai_sha_ii_g_7_day_charge
-                name: 近7天充电 (kWh)
-              - entity: sensor.bai_sha_ii_g_7_day_consumption
-                name: 近7天用电 (kWh)
-              - entity: sensor.bai_sha_ii_g_last_report
-                name: 最后上报
+    - type: picture
+      title: 白鲨Ⅱ-G PRO
+      image_entity: image.bai_sha_ii_g
+    - type: horizontal-stack
+      cards:
+      - type: gauge
+        entity: sensor.bai_sha_ii_g_battery
+        name: 电量
+        min: 0
+        max: 100
+        severity:
+          green: 50
+          yellow: 20
+          red: 0
+        needle: false
+      - type: gauge
+        entity: sensor.bai_sha_ii_g_remaining_range
+        name: 续航 (km)
+        min: 0
+        max: 200
+        severity:
+          green: 100
+          yellow: 50
+          red: 0
+        needle: false
+    - type: horizontal-stack
+      cards:
+      - type: entity
+        entity: sensor.bai_sha_ii_g_mileage_this_month
+        name: 本月里程 (km)
+      - type: entity
+        entity: sensor.bai_sha_ii_g_total_mileage
+        name: 累计里程 (km)
+      - type: entity
+        entity: sensor.bai_sha_ii_g_total_co2_saved
+        name: 碳减排 (kg)
+    - type: entities
+      title: 能耗与状态
+      entities:
+      - entity: sensor.bai_sha_ii_g_yesterday_charge
+        name: 昨日充电 (kWh)
+      - entity: sensor.bai_sha_ii_g_yesterday_consumption
+        name: 昨日用电 (kWh)
+      - entity: sensor.bai_sha_ii_g_7_day_charge
+        name: 近7天充电 (kWh)
+      - entity: sensor.bai_sha_ii_g_7_day_consumption
+        name: 近7天用电 (kWh)
+      - entity: sensor.bai_sha_ii_g_last_report
+        name: 最后上报
+  - type: vertical-stack
+    cards:
+    - type: picture
+      title: 冠能龙霆70 都市劲享版
+      image_entity: image.long_ting_70_y_g
+    - type: horizontal-stack
+      cards:
+      - type: gauge
+        entity: sensor.long_ting_70_y_g_battery
+        name: 电量
+        min: 0
+        max: 100
+        severity:
+          green: 50
+          yellow: 20
+          red: 0
+        needle: false
+      - type: gauge
+        entity: sensor.long_ting_70_y_g_remaining_range
+        name: 续航 (km)
+        min: 0
+        max: 100
+        severity:
+          green: 50
+          yellow: 20
+          red: 0
+        needle: false
+    - type: horizontal-stack
+      cards:
+      - type: entity
+        entity: sensor.long_ting_70_y_g_mileage_this_month
+        name: 本月里程 (km)
+      - type: entity
+        entity: sensor.long_ting_70_y_g_total_mileage
+        name: 累计里程 (km)
+      - type: entity
+        entity: sensor.long_ting_70_y_g_total_co2_saved
+        name: 碳减排 (kg)
+    - type: entities
+      title: 能耗与状态
+      entities:
+      - entity: sensor.long_ting_70_y_g_yesterday_charge
+        name: 昨日充电 (kWh)
+      - entity: sensor.long_ting_70_y_g_yesterday_consumption
+        name: 昨日用电 (kWh)
+      - entity: sensor.long_ting_70_y_g_7_day_charge
+        name: 近7天充电 (kWh)
+      - entity: sensor.long_ting_70_y_g_7_day_consumption
+        name: 近7天用电 (kWh)
+      - entity: sensor.long_ting_70_y_g_last_report
+        name: 最后上报
+  - type: entities
+    title: 车辆详情
+    entities:
+    - entity: sensor.bai_sha_ii_g_vehicle_info
+      name: 白鲨Ⅱ 车辆信息
+      icon: mdi:motorbike
+    - entity: sensor.long_ting_70_y_g_vehicle_info
+      name: 龙霆70 车辆信息
+      icon: mdi:motorbike
+    - entity: sensor.bai_sha_ii_g_battery_count
+      name: 白鲨Ⅱ 电池数量
+    - entity: sensor.long_ting_70_y_g_battery_count
+      name: 龙霆70 电池数量
+    - entity: sensor.bai_sha_ii_g_iot_days_remaining
+      name: 白鲨Ⅱ 物联卡剩余天数
+    - entity: sensor.long_ting_70_y_g_iot_days_remaining
+      name: 龙霆70 物联卡剩余天数
+    - entity: sensor.bai_sha_ii_g_iot_card_expires
+      name: 白鲨Ⅱ 物联卡到期日
+    - entity: sensor.long_ting_70_y_g_iot_card_expires
+      name: 龙霆70 物联卡到期日
+    - entity: image.bai_sha_ii_g
+      name: 白鲨Ⅱ 图片实体
+    - entity: image.long_ting_70_y_g
+      name: 龙霆70 图片实体
+  icon: mdi:view-dashboard
+- title: 精简总览
+  path: compact
+  icon: mdi:view-grid-plus
+  type: sections
+  max_columns: 4
+  sections:
+  - type: grid
+    cards:
+    - type: heading
+      heading: 白鲨Ⅱ-G PRO
+      icon: mdi:motorbike
+      heading_style: title
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.bai_sha_ii_g_battery
+        name: 电量
+        icon: mdi:battery-high
+        color: green
+      - type: tile
+        entity: sensor.bai_sha_ii_g_remaining_range
+        name: 续航
+        icon: mdi:map-marker-distance
+        color: blue
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.bai_sha_ii_g_mileage_this_month
+        name: 本月里程
+        icon: mdi:road-variant
+      - type: tile
+        entity: sensor.bai_sha_ii_g_total_mileage
+        name: 累计里程
+        icon: mdi:counter
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.bai_sha_ii_g_total_co2_saved
+        name: 碳减排
+        icon: mdi:leaf
+        color: green
+      - type: tile
+        entity: sensor.bai_sha_ii_g_daily_mileage
+        name: 近7天骑行
+        icon: mdi:bike-fast
+        color: teal
+    - type: tile
+      entity: sensor.bai_sha_ii_g_last_report
+      name: 最后上报
+      icon: mdi:clock-check-outline
+      color: grey
+  - type: grid
+    cards:
+    - type: heading
+      heading: 冠能龙霆70
+      icon: mdi:motorbike
+      heading_style: title
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.long_ting_70_y_g_battery
+        name: 电量
+        icon: mdi:battery-high
+        color: green
+      - type: tile
+        entity: sensor.long_ting_70_y_g_remaining_range
+        name: 续航
+        icon: mdi:map-marker-distance
+        color: blue
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.long_ting_70_y_g_mileage_this_month
+        name: 本月里程
+        icon: mdi:road-variant
+      - type: tile
+        entity: sensor.long_ting_70_y_g_total_mileage
+        name: 累计里程
+        icon: mdi:counter
+    - type: horizontal-stack
+      cards:
+      - type: tile
+        entity: sensor.long_ting_70_y_g_total_co2_saved
+        name: 碳减排
+        icon: mdi:leaf
+        color: green
+      - type: tile
+        entity: sensor.long_ting_70_y_g_daily_mileage
+        name: 近7天骑行
+        icon: mdi:bike-fast
+        color: teal
+    - type: tile
+      entity: sensor.long_ting_70_y_g_last_report
+      name: 最后上报
+      icon: mdi:clock-check-outline
+      color: grey
+  - type: grid
+    cards:
+    - type: heading
+      heading: 白鲨Ⅱ · 诊断
+      icon: mdi:stethoscope
+    - type: tile
+      entity: sensor.bai_sha_ii_g_battery_count
+      name: 电池数量
+      icon: mdi:battery-multiple
+    - type: tile
+      entity: sensor.bai_sha_ii_g_iot_days_remaining
+      name: 物联卡天数
+      icon: mdi:sim
+      color: amber
+    - type: tile
+      entity: sensor.bai_sha_ii_g_iot_card_expires
+      name: 物联卡到期
+      icon: mdi:calendar-clock
+    - type: tile
+      entity: image.bai_sha_ii_g
+      name: 车辆图片
+      icon: mdi:image-outline
+      color: disabled
+  - type: grid
+    cards:
+    - type: heading
+      heading: 龙霆70 · 诊断
+      icon: mdi:stethoscope
+    - type: tile
+      entity: sensor.long_ting_70_y_g_battery_count
+      name: 电池数量
+      icon: mdi:battery-multiple
+    - type: tile
+      entity: sensor.long_ting_70_y_g_iot_days_remaining
+      name: 物联卡天数
+      icon: mdi:sim
+      color: amber
+    - type: tile
+      entity: sensor.long_ting_70_y_g_iot_card_expires
+      name: 物联卡到期
+      icon: mdi:calendar-clock
+    - type: tile
+      entity: image.long_ting_70_y_g
+      name: 车辆图片
+      icon: mdi:image-outline
+      color: disabled
+- title: 状态速览
+  path: glance
+  icon: mdi:text-box-check-outline
+  type: panels
+  cards:
+  - type: horizontal-stack
+    cards:
+    - type: vertical-stack
+      cards:
+      - type: markdown
+        content: '### 🛵 白鲨Ⅱ-G PRO
 
-      # ══════════ 冠能龙霆70 ══════════
-      - type: vertical-stack
-        cards:
-          - type: picture
-            title: 冠能龙霆70 都市劲享版
-            image_entity: image.long_ting_70_y_g
-          - type: horizontal-stack
-            cards:
-              - type: gauge
-                entity: sensor.long_ting_70_y_g_battery
-                name: 电量
-                min: 0
-                max: 100
-                severity:
-                  green: 50
-                  yellow: 20
-                  red: 0
-                needle: false
-              - type: gauge
-                entity: sensor.long_ting_70_y_g_remaining_range
-                name: 续航 (km)
-                min: 0
-                max: 100
-                severity:
-                  green: 50
-                  yellow: 20
-                  red: 0
-                needle: false
-          - type: horizontal-stack
-            cards:
-              - type: entity
-                entity: sensor.long_ting_70_y_g_mileage_this_month
-                name: 本月里程 (km)
-              - type: entity
-                entity: sensor.long_ting_70_y_g_total_mileage
-                name: 累计里程 (km)
-              - type: entity
-                entity: sensor.long_ting_70_y_g_total_co2_saved
-                name: 碳减排 (kg)
-          - type: entities
-            title: 能耗与状态
-            entities:
-              - entity: sensor.long_ting_70_y_g_yesterday_charge
-                name: 昨日充电 (kWh)
-              - entity: sensor.long_ting_70_y_g_yesterday_consumption
-                name: 昨日用电 (kWh)
-              - entity: sensor.long_ting_70_y_g_7_day_charge
-                name: 近7天充电 (kWh)
-              - entity: sensor.long_ting_70_y_g_7_day_consumption
-                name: 近7天用电 (kWh)
-              - entity: sensor.long_ting_70_y_g_last_report
-                name: 最后上报
 
-      # ══════════ 车辆详情（诊断信息） ══════════
-      - type: entities
-        title: 车辆详情
-        entities:
-          - entity: sensor.bai_sha_ii_g_vehicle_info
-            name: 白鲨Ⅱ 车辆信息
-            icon: mdi:motorbike
-          - entity: sensor.long_ting_70_y_g_vehicle_info
-            name: 龙霆70 车辆信息
-            icon: mdi:motorbike
-          - entity: sensor.bai_sha_ii_g_battery_count
-            name: 白鲨Ⅱ 电池数量
-          - entity: sensor.long_ting_70_y_g_battery_count
-            name: 龙霆70 电池数量
-          - entity: sensor.bai_sha_ii_g_iot_days_remaining
-            name: 白鲨Ⅱ 物联卡剩余天数
-          - entity: sensor.long_ting_70_y_g_iot_days_remaining
-            name: 龙霆70 物联卡剩余天数
-          - entity: sensor.bai_sha_ii_g_iot_card_expires
-            name: 白鲨Ⅱ 物联卡到期日
-          - entity: sensor.long_ting_70_y_g_iot_card_expires
-            name: 龙霆70 物联卡到期日
-          - entity: image.bai_sha_ii_g
-            name: 白鲨Ⅱ 图片实体
-          - entity: image.long_ting_70_y_g
-            name: 龙霆70 图片实体
+          **🔋 电量** `{{ states(''sensor.bai_sha_ii_g_battery'') }}` %
 
-# ─────────────────────────────────────────────────────────────
-# 进阶美化（可选）：安装 HACS 里的 mushroom + card-mod 后，
-# 可把上面的 picture 卡替换为深色渐变风格的模板卡：
-#
-# - type: custom:mushroom-template-card
-#   primary: 白鲨Ⅱ-G PRO
-#   secondary: >-
-#     电量 {{ states('sensor.bai_sha_ii_g_battery') }}% ·
-#     续航 {{ states('sensor.bai_sha_ii_g_remaining_range') }} km
-#   picture: https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png
-#   card_mod:
-#     style: |
-#       ha-card {
-#         background: linear-gradient(135deg, #1a1a2e, #16213e);
-#         color: white;
-#         border-radius: 20px;
-#       }
+          **🛣️ 续航** `{{ states(''sensor.bai_sha_ii_g_remaining_range'') }}` km
+
+          **📅 本月里程** `{{ states(''sensor.bai_sha_ii_g_mileage_this_month'') }}` km
+
+          **🧮 累计里程** `{{ states(''sensor.bai_sha_ii_g_total_mileage'') }}` km
+
+          **🌱 碳减排** `{{ states(''sensor.bai_sha_ii_g_total_co2_saved'') }}` kg
+
+          **⚡ 近7天充电** `{{ states(''sensor.bai_sha_ii_g_7_day_charge'') }}` kWh
+
+          **🔌 近7天用电** `{{ states(''sensor.bai_sha_ii_g_7_day_consumption'') }}` kWh
+
+
+          *最后上报: {{ states(''sensor.bai_sha_ii_g_last_report'') }}*'
+      - type: picture
+        image_entity: image.bai_sha_ii_g
+    - type: vertical-stack
+      cards:
+      - type: markdown
+        content: '### 🏍️ 冠能龙霆70
+
+
+          **🔋 电量** `{{ states(''sensor.long_ting_70_y_g_battery'') }}` %
+
+          **🛣️ 续航** `{{ states(''sensor.long_ting_70_y_g_remaining_range'') }}` km
+
+          **📅 本月里程** `{{ states(''sensor.long_ting_70_y_g_mileage_this_month'') }}` km
+
+          **🧮 累计里程** `{{ states(''sensor.long_ting_70_y_g_total_mileage'') }}` km
+
+          **🌱 碳减排** `{{ states(''sensor.long_ting_70_y_g_total_co2_saved'') }}` kg
+
+          **⚡ 近7天充电** `{{ states(''sensor.long_ting_70_y_g_7_day_charge'') }}` kWh
+
+          **🔌 近7天用电** `{{ states(''sensor.long_ting_70_y_g_7_day_consumption'') }}` kWh
+
+
+          *最后上报: {{ states(''sensor.long_ting_70_y_g_last_report'') }}*'
+      - type: picture
+        image_entity: image.long_ting_70_y_g
