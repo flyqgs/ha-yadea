@@ -34,11 +34,12 @@
 
 ### 仪表盘美化示例
 
-仓库里的 [`dashboard-example.yaml`](dashboard-example.yaml) 是一份纯核心卡片
-（无需 HACS）的电动车仪表盘：车辆图 + 电量表盘 + 里程统计，
-复制到自定义仪表盘（YAML 模式）并替换实体 ID 即可。
-| 昨日用电 / 昨日充电 | kWh | 每日用电统计 |
-| 近7天用电 / 近7天充电 | kWh（7 天合计，附逐日明细属性） | 每日用电统计 ×7 |
+仓库里的 [`dashboard-example.yaml`](dashboard-example.yaml) 含 5 个视图：
+**总览·经典**（纯核心卡片）、**精简总览**、**状态速览**（图文融合）、
+**进阶版**（mushroom + mini-graph）与 **旗舰版**（深色 HUD 控制台，
+含双车 hero 卡、7 天骑行条形图、双车对比镜像条、能耗网格与车辆档案，
+需 [card-mod](https://github.com/thomasloven/lovelace-card-mod)）。
+复制到自定义仪表盘并替换实体 ID 即可。
 
 设备页会显示车辆官方图片（`imgUrl`）。
 

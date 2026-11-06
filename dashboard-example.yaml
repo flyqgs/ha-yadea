@@ -267,7 +267,7 @@ views:
         icon: mdi:leaf
         color: green
       - type: tile
-        entity: sensor.bai_sha_ii_g_daily_mileage
+        entity: sensor.bai_sha_ii_g_daily_mileage_7_day
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
@@ -406,7 +406,7 @@ views:
         icon: mdi:leaf
         color: green
       - type: tile
-        entity: sensor.long_ting_70_y_g_daily_mileage
+        entity: sensor.long_ting_70_y_g_daily_mileage_7_day
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
@@ -920,3 +920,262 @@ views:
         layout: vertical
         card_mod:
           style: 'ha-card { border-radius: 16px; }'
+
+- title: 旗舰版
+  path: pro
+  icon: mdi:crown-outline
+  type: sections
+  max_columns: 2
+  background: "radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)"
+  sections:
+  - type: grid
+    cards:
+    - type: markdown
+      content: |
+        {% set soc = states('sensor.bai_sha_ii_g_battery')|float(0)|round(0)|int %}
+        {% set rng = states('sensor.bai_sha_ii_g_remaining_range')|float(0)|round(0)|int %}
+        {% set month = states('sensor.bai_sha_ii_g_mileage_this_month')|float(0)|round(1) %}
+        {% set bc = states('sensor.bai_sha_ii_g_battery_count')|float(0)|round(0)|int %}
+        {% set ts = as_timestamp(states('sensor.bai_sha_ii_g_last_report'), 0) %}
+        {% set mins = ((now().timestamp() - ts)/60)|int %}
+        {% set ago = '—' if ts < 1000000000 else ((mins|string ~ ' 分钟前') if mins < 60 else (((mins//60)|string ~ ' 小时前') if mins < 2880 else ((mins//1440)|string ~ ' 天前'))) %}
+        {% set bcol = 'linear-gradient(90deg,#22c55e,#a3e635)' if soc >= 50 else ('linear-gradient(90deg,#f59e0b,#fbbf24)' if soc >= 20 else 'linear-gradient(90deg,#ef4444,#fb7185)') %}
+        <div style="min-height:192px;display:flex;flex-direction:column;justify-content:space-between;text-align:left"><div><div style="font-size:10px;letter-spacing:2.6px;color:#60a5fa;font-weight:700">YADEA · SMART MOTO</div><div style="font-size:22px;font-weight:700;color:#f8fafc;margin-top:5px;letter-spacing:.5px">白鲨Ⅱ-G PRO</div><div style="display:flex;align-items:flex-end;gap:4px;margin-top:12px"><span style="font-size:46px;line-height:.92;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums">{{ soc }}</span><span style="font-size:14px;color:#94a3b8;margin-bottom:5px">%</span><span style="margin-left:14px;margin-bottom:6px;font-size:13px;color:#cbd5e1">续航 <b style="color:#e2e8f0;font-size:15px">{{ rng }}</b> km</span></div></div><div><div style="height:8px;border-radius:99px;background:rgba(148,163,184,.16);overflow:hidden"><div style="height:100%;width:{{ soc }}%;border-radius:99px;background:{{ bcol }}"></div></div><div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:#94a3b8"><span>电池 {{ bc }} 组</span><span>本月 {{ month }} km</span><span>上报 {{ ago }}</span></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.16);
+            border-radius: 24px;
+            padding: 18px 20px;
+            overflow: hidden;
+            background:
+              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
+              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png") right 2px center / contain no-repeat,
+              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: markdown
+      content: |
+        {% macro n(e, dg) %}{% set v = states(e) %}{% if v in ['unknown','unavailable','None',''] %}—{% else %}{{ (v|float(0)|round(dg))|int if dg == 0 else (v|float(0)|round(dg)) }}{% endif %}{% endmacro %}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="border-radius:16px;padding:12px 14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.10)"><div style="font-size:11px;color:#94a3b8;letter-spacing:.5px">本月里程</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_mileage_this_month', 1) }}<span style="font-size:11px;color:#64748b;font-weight:500;margin-left:4px">km</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.10)"><div style="font-size:11px;color:#94a3b8;letter-spacing:.5px">累计里程</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_total_mileage', 1) }}<span style="font-size:11px;color:#64748b;font-weight:500;margin-left:4px">km</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.16)"><div style="font-size:11px;color:#86efac;letter-spacing:.5px">累计碳减排</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#dcfce7;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_total_co2_saved', 1) }}<span style="font-size:11px;color:#4ade80;font-weight:500;margin-left:4px">kg</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.16)"><div style="font-size:11px;color:#7dd3fc;letter-spacing:.5px">近 7 天骑行</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#e0f2fe;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_daily_mileage_7_day', 1) }}<span style="font-size:11px;color:#38bdf8;font-weight:500;margin-left:4px">km</span></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: heading
+      heading: 近 7 天骑行
+      icon: mdi:chart-timeline-variant
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #60a5fa !important; }
+    - type: markdown
+      content: |
+        {% set days = state_attr('sensor.bai_sha_ii_g_daily_mileage_7_day','last_7_days') or [] %}
+        {% set ns = namespace(mx=1) %}
+        {% for d in days %}{% set k = (d.km|float(0)) if d.km is not none else 0 %}{% if k > ns.mx %}{% set ns.mx = k %}{% endif %}{% endfor %}
+        {% if days %}
+        <div>{% for d in days %}<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:38px;font-size:11px;color:#94a3b8;font-variant-numeric:tabular-nums">{{ (d.date|string)[5:10] if (d.date|string)|length >= 10 else (d.date|string) }}</span><span style="flex:1;height:8px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden;display:block"><span style="display:block;height:100%;width:{{ (((d.km|float(0)) if d.km is not none else 0) / ns.mx * 100)|round(1) }}%;border-radius:99px;background:linear-gradient(90deg,#22d3ee,#3b82f6)"></span></span><span style="width:42px;text-align:right;font-size:12px;color:#e2e8f0;font-weight:600;font-variant-numeric:tabular-nums">{{ (d.km|float(0)) if d.km is not none else 0 }}</span></div>{% endfor %}</div>
+        {% else %}
+        <div style="border-radius:16px;padding:14px 16px;background:rgba(148,163,184,.07);border:1px dashed rgba(148,163,184,.22);font-size:12px;line-height:1.7;color:#94a3b8">雅迪云端暂无逐日骑行记录 —— 骑行数据由 App 端采集后上传，云端为空时此处留白。</div>
+        {% endif %}
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+  - type: grid
+    cards:
+    - type: markdown
+      content: |
+        {% set soc = states('sensor.long_ting_70_y_g_battery')|float(0)|round(0)|int %}
+        {% set rng = states('sensor.long_ting_70_y_g_remaining_range')|float(0)|round(0)|int %}
+        {% set month = states('sensor.long_ting_70_y_g_mileage_this_month')|float(0)|round(1) %}
+        {% set bc = states('sensor.long_ting_70_y_g_battery_count')|float(0)|round(0)|int %}
+        {% set ts = as_timestamp(states('sensor.long_ting_70_y_g_last_report'), 0) %}
+        {% set mins = ((now().timestamp() - ts)/60)|int %}
+        {% set ago = '—' if ts < 1000000000 else ((mins|string ~ ' 分钟前') if mins < 60 else (((mins//60)|string ~ ' 小时前') if mins < 2880 else ((mins//1440)|string ~ ' 天前'))) %}
+        {% set bcol = 'linear-gradient(90deg,#22c55e,#a3e635)' if soc >= 50 else ('linear-gradient(90deg,#f59e0b,#fbbf24)' if soc >= 20 else 'linear-gradient(90deg,#ef4444,#fb7185)') %}
+        <div style="min-height:192px;display:flex;flex-direction:column;justify-content:space-between;text-align:left"><div><div style="font-size:10px;letter-spacing:2.6px;color:#60a5fa;font-weight:700">YADEA · SMART MOTO</div><div style="font-size:22px;font-weight:700;color:#f8fafc;margin-top:5px;letter-spacing:.5px">冠能龙霆70</div><div style="display:flex;align-items:flex-end;gap:4px;margin-top:12px"><span style="font-size:46px;line-height:.92;font-weight:800;color:#ffffff;font-variant-numeric:tabular-nums">{{ soc }}</span><span style="font-size:14px;color:#94a3b8;margin-bottom:5px">%</span><span style="margin-left:14px;margin-bottom:6px;font-size:13px;color:#cbd5e1">续航 <b style="color:#e2e8f0;font-size:15px">{{ rng }}</b> km</span></div></div><div><div style="height:8px;border-radius:99px;background:rgba(148,163,184,.16);overflow:hidden"><div style="height:100%;width:{{ soc }}%;border-radius:99px;background:{{ bcol }}"></div></div><div style="display:flex;justify-content:space-between;margin-top:10px;font-size:11px;color:#94a3b8"><span>电池 {{ bc }} 组</span><span>本月 {{ month }} km</span><span>上报 {{ ago }}</span></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.16);
+            border-radius: 24px;
+            padding: 18px 20px;
+            overflow: hidden;
+            background:
+              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
+              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png") right 2px center / contain no-repeat,
+              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: markdown
+      content: |
+        {% macro n(e, dg) %}{% set v = states(e) %}{% if v in ['unknown','unavailable','None',''] %}—{% else %}{{ (v|float(0)|round(dg))|int if dg == 0 else (v|float(0)|round(dg)) }}{% endif %}{% endmacro %}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="border-radius:16px;padding:12px 14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.10)"><div style="font-size:11px;color:#94a3b8;letter-spacing:.5px">本月里程</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_mileage_this_month', 1) }}<span style="font-size:11px;color:#64748b;font-weight:500;margin-left:4px">km</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.10)"><div style="font-size:11px;color:#94a3b8;letter-spacing:.5px">累计里程</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_total_mileage', 1) }}<span style="font-size:11px;color:#64748b;font-weight:500;margin-left:4px">km</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.16)"><div style="font-size:11px;color:#86efac;letter-spacing:.5px">累计碳减排</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#dcfce7;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_total_co2_saved', 1) }}<span style="font-size:11px;color:#4ade80;font-weight:500;margin-left:4px">kg</span></div></div><div style="border-radius:16px;padding:12px 14px;background:rgba(56,189,248,.08);border:1px solid rgba(56,189,248,.16)"><div style="font-size:11px;color:#7dd3fc;letter-spacing:.5px">近 7 天骑行</div><div style="margin-top:4px;font-size:22px;font-weight:700;color:#e0f2fe;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_daily_mileage_7_day', 1) }}<span style="font-size:11px;color:#38bdf8;font-weight:500;margin-left:4px">km</span></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: heading
+      heading: 近 7 天骑行
+      icon: mdi:chart-timeline-variant
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #60a5fa !important; }
+    - type: markdown
+      content: |
+        {% set days = state_attr('sensor.long_ting_70_y_g_daily_mileage_7_day','last_7_days') or [] %}
+        {% set ns = namespace(mx=1) %}
+        {% for d in days %}{% set k = (d.km|float(0)) if d.km is not none else 0 %}{% if k > ns.mx %}{% set ns.mx = k %}{% endif %}{% endfor %}
+        {% if days %}
+        <div>{% for d in days %}<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:38px;font-size:11px;color:#94a3b8;font-variant-numeric:tabular-nums">{{ (d.date|string)[5:10] if (d.date|string)|length >= 10 else (d.date|string) }}</span><span style="flex:1;height:8px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden;display:block"><span style="display:block;height:100%;width:{{ (((d.km|float(0)) if d.km is not none else 0) / ns.mx * 100)|round(1) }}%;border-radius:99px;background:linear-gradient(90deg,#22d3ee,#3b82f6)"></span></span><span style="width:42px;text-align:right;font-size:12px;color:#e2e8f0;font-weight:600;font-variant-numeric:tabular-nums">{{ (d.km|float(0)) if d.km is not none else 0 }}</span></div>{% endfor %}</div>
+        {% else %}
+        <div style="border-radius:16px;padding:14px 16px;background:rgba(148,163,184,.07);border:1px dashed rgba(148,163,184,.22);font-size:12px;line-height:1.7;color:#94a3b8">雅迪云端暂无逐日骑行记录 —— 骑行数据由 App 端采集后上传，云端为空时此处留白。</div>
+        {% endif %}
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+  - type: grid
+    cards:
+    - type: heading
+      heading: 双车对比
+      icon: mdi:compare-horizontal
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #60a5fa !important; }
+    - type: markdown
+      content: |
+        {% set sb = states('sensor.bai_sha_ii_g_battery')|float(0) %}
+        {% set sl = states('sensor.long_ting_70_y_g_battery')|float(0) %}
+        {% set mb = states('sensor.bai_sha_ii_g_mileage_this_month')|float(0) %}
+        {% set ml = states('sensor.long_ting_70_y_g_mileage_this_month')|float(0) %}
+        {% set tb = states('sensor.bai_sha_ii_g_total_mileage')|float(0) %}
+        {% set tl = states('sensor.long_ting_70_y_g_total_mileage')|float(0) %}
+        {% set mmx = [mb, ml, 1]|max %}
+        {% set tmx = [tb, tl, 1]|max %}
+        <div><div style="display:flex;align-items:center;gap:12px;margin-bottom:12px"><div style="flex:1;text-align:right;font-size:11px;font-weight:700;color:#7dd3fc;letter-spacing:.5px">白鲨Ⅱ</div><div style="width:100px"></div><div style="flex:1;font-size:11px;font-weight:700;color:#22d3ee;letter-spacing:.5px">龙霆70</div></div><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ sb|round(0)|int }}%;margin-left:auto;border-radius:99px;background:linear-gradient(270deg,#6366f1,#38bdf8)"></div></div><div style="width:100px;text-align:center"><div style="font-size:10px;letter-spacing:1px;color:#94a3b8">电量</div><div style="font-size:13px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ sb|round(0)|int }}<span style="color:#475569;font-weight:400"> / </span>{{ sl|round(0)|int }}</div></div><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ sl|round(0)|int }}%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#22d3ee)"></div></div></div><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ (mb/mmx*100)|round(1) }}%;margin-left:auto;border-radius:99px;background:linear-gradient(270deg,#6366f1,#38bdf8)"></div></div><div style="width:100px;text-align:center"><div style="font-size:10px;letter-spacing:1px;color:#94a3b8">本月 km</div><div style="font-size:13px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ mb|round(1) }}<span style="color:#475569;font-weight:400"> / </span>{{ ml|round(1) }}</div></div><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ (ml/mmx*100)|round(1) }}%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#22d3ee)"></div></div></div><div style="display:flex;align-items:center;gap:12px"><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ (tb/tmx*100)|round(1) }}%;margin-left:auto;border-radius:99px;background:linear-gradient(270deg,#6366f1,#38bdf8)"></div></div><div style="width:100px;text-align:center"><div style="font-size:10px;letter-spacing:1px;color:#94a3b8">累计 km</div><div style="font-size:13px;font-weight:700;color:#f1f5f9;font-variant-numeric:tabular-nums">{{ tb|round(1) }}<span style="color:#475569;font-weight:400"> / </span>{{ tl|round(1) }}</div></div><div style="flex:1;height:9px;border-radius:99px;background:rgba(148,163,184,.14);overflow:hidden"><div style="height:100%;width:{{ (tl/tmx*100)|round(1) }}%;border-radius:99px;background:linear-gradient(90deg,#38bdf8,#22d3ee)"></div></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: heading
+      heading: 车辆档案
+      icon: mdi:card-account-details-outline
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #60a5fa !important; }
+    - type: markdown
+      content: |
+        {% macro a(e, k) %}{% set v = state_attr(e, k) %}{{ v if v not in [None, '', 'None'] else '—' }}{% endmacro %}
+        {% macro dt(e, k) %}{% set v = state_attr(e, k) %}{{ (v|string)[:10] if v not in [None, '', 'None'] else '—' }}{% endmacro %}
+        {% set rows = [('型号','model_no'),('颜色','color'),('电池类型','battery_type'),('蓝牙名','bluetooth_name'),('MAC','mac_address'),('ICCID','iccid'),('绑定日期','BIND'),('物联卡到期','iot_card_expire')] %}
+        <div style="display:grid;grid-template-columns:58px 1fr 1fr;column-gap:10px"><div style="font-size:10px;color:#475569;padding:7px 0"></div><div style="font-size:10px;color:#7dd3fc;font-weight:700;padding:7px 0;letter-spacing:.4px">白鲨Ⅱ</div><div style="font-size:10px;color:#22d3ee;font-weight:700;padding:7px 0;letter-spacing:.4px">龙霆70</div>{% for r in rows %}<div style="font-size:10px;color:#94a3b8;padding:7px 0;border-top:1px solid rgba(148,163,184,.10)">{{ r[0] }}</div><div style="font-size:11px;color:#e2e8f0;padding:7px 0;border-top:1px solid rgba(148,163,184,.10);word-break:break-all;font-variant-numeric:tabular-nums">{% if r[1] in ['BIND', 'iot_card_expire'] %}{{ dt('sensor.bai_sha_ii_g_vehicle_info','bound_at' if r[1] == 'BIND' else 'iot_card_expire') }}{% else %}{{ a('sensor.bai_sha_ii_g_vehicle_info', r[1]) }}{% endif %}</div><div style="font-size:11px;color:#e2e8f0;padding:7px 0;border-top:1px solid rgba(148,163,184,.10);word-break:break-all;font-variant-numeric:tabular-nums">{% if r[1] in ['BIND', 'iot_card_expire'] %}{{ dt('sensor.long_ting_70_y_g_vehicle_info','bound_at' if r[1] == 'BIND' else 'iot_card_expire') }}{% else %}{{ a('sensor.long_ting_70_y_g_vehicle_info', r[1]) }}{% endif %}</div>{% endfor %}</div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+  - type: grid
+    cards:
+    - type: heading
+      heading: 能耗 · 云端计费
+      icon: mdi:transmission-tower
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #fbbf24 !important; }
+    - type: markdown
+      content: |
+        {% macro n(e, dg) %}{% set v = states(e) %}{% if v in ['unknown','unavailable','None',''] %}—{% else %}{{ (v|float(0)|round(dg))|int if dg == 0 else (v|float(0)|round(dg)) }}{% endif %}{% endmacro %}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><div style="display:flex;align-items:center;gap:6px;margin-bottom:9px"><span style="width:6px;height:6px;border-radius:99px;background:#38bdf8;display:inline-block"></span><span style="font-size:12px;color:#cbd5e1;font-weight:600">白鲨Ⅱ</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="border-radius:14px;padding:9px 11px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.16)"><div style="font-size:10px;color:#fcd34d">昨日充电</div><div style="font-size:15px;font-weight:700;color:#fef3c7;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_yesterday_charge', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.16)"><div style="font-size:10px;color:#fdba74">昨日用电</div><div style="font-size:15px;font-weight:700;color:#ffedd5;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_yesterday_consumption', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.16)"><div style="font-size:10px;color:#5eead4">7 天充电</div><div style="font-size:15px;font-weight:700;color:#ccfbf1;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_7_day_charge', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.16)"><div style="font-size:10px;color:#67e8f9">7 天用电</div><div style="font-size:15px;font-weight:700;color:#cffafe;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_7_day_consumption', 2) }}</div></div></div></div><div><div style="display:flex;align-items:center;gap:6px;margin-bottom:9px"><span style="width:6px;height:6px;border-radius:99px;background:#22d3ee;display:inline-block"></span><span style="font-size:12px;color:#cbd5e1;font-weight:600">龙霆70</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><div style="border-radius:14px;padding:9px 11px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.16)"><div style="font-size:10px;color:#fcd34d">昨日充电</div><div style="font-size:15px;font-weight:700;color:#fef3c7;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_yesterday_charge', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.16)"><div style="font-size:10px;color:#fdba74">昨日用电</div><div style="font-size:15px;font-weight:700;color:#ffedd5;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_yesterday_consumption', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(20,184,166,.08);border:1px solid rgba(20,184,166,.16)"><div style="font-size:10px;color:#5eead4">7 天充电</div><div style="font-size:15px;font-weight:700;color:#ccfbf1;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_7_day_charge', 2) }}</div></div><div style="border-radius:14px;padding:9px 11px;background:rgba(6,182,212,.08);border:1px solid rgba(6,182,212,.16)"><div style="font-size:10px;color:#67e8f9">7 天用电</div><div style="font-size:15px;font-weight:700;color:#cffafe;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_7_day_consumption', 2) }}</div></div></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: markdown
+      content: |
+        {% macro n(e, dg) %}{% set v = states(e) %}{% if v in ['unknown','unavailable','None',''] %}—{% else %}{{ (v|float(0)|round(dg))|int if dg == 0 else (v|float(0)|round(dg)) }}{% endif %}{% endmacro %}
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:10px;font-weight:700;color:#94a3b8;letter-spacing:1.4px">物联卡</span><span style="flex:1;height:1px;background:linear-gradient(90deg,rgba(148,163,184,.28),transparent)"></span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div style="border-radius:14px;padding:10px 12px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.12)"><div style="font-size:10px;color:#94a3b8">白鲨Ⅱ · 剩余天数</div><div style="font-size:17px;font-weight:700;color:#e2e8f0;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.bai_sha_ii_g_iot_days_remaining', 0) }}<span style="font-size:10px;color:#64748b;font-weight:500;margin-left:3px">天</span></div></div><div style="border-radius:14px;padding:10px 12px;background:rgba(148,163,184,.07);border:1px solid rgba(148,163,184,.12)"><div style="font-size:10px;color:#94a3b8">龙霆70 · 剩余天数</div><div style="font-size:17px;font-weight:700;color:#e2e8f0;margin-top:2px;font-variant-numeric:tabular-nums">{{ n('sensor.long_ting_70_y_g_iot_days_remaining', 0) }}<span style="font-size:10px;color:#64748b;font-weight:500;margin-left:3px">天</span></div></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          }
+          ha-markdown { padding: 0 !important; }
+    - type: heading
+      heading: 数据说明
+      icon: mdi:information-outline
+      heading_style: subtitle
+      card_mod:
+        style: |
+          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
+          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
+          ha-icon { color: #64748b !important; }
+    - type: markdown
+      content: |
+        <div style="font-size:11px;line-height:1.9;color:#94a3b8"><div style="display:flex;gap:8px"><span style="color:#38bdf8">●</span><span>数据源为雅迪云端快照，默认 <b style="color:#cbd5e1">60 秒</b> 轮询，仅读取不写入车辆。</span></div><div style="display:flex;gap:8px"><span style="color:#22c55e">●</span><span>电量配色：<b style="color:#f87171">&lt;20%</b> 红 · <b style="color:#fbbf24">20–50%</b> 琥珀 · <b style="color:#4ade80">≥50%</b> 绿。</span></div><div style="display:flex;gap:8px"><span style="color:#a78bfa">●</span><span>逐日里程与能耗需 App 端骑行后上传，云端无记录时显示占位或“—”。</span></div></div>
+      card_mod:
+        style: |
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.10);
+            border-radius: 22px;
+            background: linear-gradient(158deg, rgba(18,27,45,0.80) 0%, rgba(9,14,26,0.90) 100%);
+            box-shadow: 0 12px 30px rgba(2,6,23,0.32);
+          }
+          ha-markdown { padding: 0 !important; }
