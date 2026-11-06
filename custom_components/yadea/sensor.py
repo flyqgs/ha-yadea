@@ -69,9 +69,11 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
         super().__init__(coordinator)
         self.vin = vin
         self._bike = bike
-        # 全局唯一 ID：VIN 出厂唯一 + 实体类型，重装/重载后保持稳定，
-        # 使实体可归入对应车辆设备并在 UI 中管理
-        self._attr_unique_id = f"{vin}_{entity_key}"
+        # 全局唯一 ID：条目ID + VIN + 实体类型。VIN 跨账号共享（家人共享）时
+        # 两个集成条目各自拥有独立实体，互不冲突；同一车辆仍归入同一设备。
+        self._attr_unique_id = (
+            f"{coordinator.entry.entry_id}_{vin}_{entity_key}"
+        )
         # 官方车辆图片（实体级，DeviceInfo 不支持 picture_url 参数）
         self._attr_entity_picture_url = bike.get("imgUrl") or None
 
