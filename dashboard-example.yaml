@@ -250,7 +250,7 @@ views:
       entity: image.bai_sha_ii_g
       name: 车辆图片
       icon: mdi:image-outline
-      color: disabled
+      color: grey
   - type: grid
     cards:
     - type: heading
@@ -273,11 +273,11 @@ views:
       entity: image.long_ting_70_y_g
       name: 车辆图片
       icon: mdi:image-outline
-      color: disabled
+      color: grey
 - title: 状态速览
   path: glance
   icon: mdi:text-box-check-outline
-  type: panels
+  type: panel
   cards:
   - type: horizontal-stack
     cards:
