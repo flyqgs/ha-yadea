@@ -6,7 +6,7 @@ updateTime 上报时间、iotExpireDays 物联卡剩余天数）+ 每日用电�
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -94,6 +94,7 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
             manufacturer="Yadea 雅迪",
             model=bike.get("modelName"),
             serial_number=self.vin,
+            picture_url=bike.get("imgUrl") or None,
         )
 
     @property
@@ -224,6 +225,133 @@ class YadeaDailyPowerSensor(YadeaEntity):
         return {"record_date": power.get("recordDate")}
 
 
+class YadeaIotExpireSensor(YadeaEntity):
+    """IoT SIM card expiration date."""
+
+    _attr_device_class = SensorDeviceClass.DATE
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_translation_key = "iot_expire"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "iot_expire")
+
+    @property
+    def native_value(self) -> date | None:
+        raw = self._current.get("iotCardExpireTime")
+        if not raw:
+            return None
+        try:
+            return datetime.strptime(str(raw)[:10], "%Y-%m-%d").date()
+        except ValueError:
+            return None
+
+
+class YadeaVehicleInfoSensor(YadeaEntity):
+    """Vehicle profile diagnostic sensor with hardware/app info attributes."""
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_icon = "mdi:information-outline"
+    _attr_translation_key = "vehicle_info"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "vehicle_info")
+
+    @property
+    def native_value(self) -> str:
+        bike = self._current
+        return bike.get("modelName") or bike.get("bikeNickName") or self.vin
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        bike = self._current
+        return {
+            "model_no": bike.get("modelNo"),
+            "material_code": bike.get("materialCode"),
+            "color": bike.get("color"),
+            "battery_type": bike.get("battType"),
+            "bluetooth_name": bike.get("bluetoothName"),
+            "mac_address": bike.get("mac"),
+            "iccid": bike.get("iccid"),
+            "iot_card_expire": bike.get("iotCardExpireTime"),
+            "bound_at": bike.get("createTime"),
+            "double_warranty": bike.get("doubleWarranty"),
+            "lifetime_warranty_battery": bike.get("lifetimeWarrantyBattery"),
+            "vehicle_image": bike.get("imgUrl"),
+        }
+
+
+class YadeaTotalMileageSensor(YadeaEntity):
+    """Lifetime total mileage (km)."""
+
+    _attr_device_class = SensorDeviceClass.DISTANCE
+    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
+    _attr_translation_key = "total_mileage"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "total_mileage")
+
+    @property
+    def native_value(self) -> float | None:
+        return _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
+
+
+class YadeaTotalCO2Sensor(YadeaEntity):
+    """Lifetime CO2 emission saved (kg)."""
+
+    _attr_state_class = SensorStateClass.TOTAL
+    _attr_native_unit_of_measurement = "kg"
+    _attr_icon = "mdi:leaf"
+    _attr_translation_key = "total_co2"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "total_co2")
+
+    @property
+    def native_value(self) -> float | None:
+        return _to_float((self._extras.get("total") or {}).get("totalCO2"))
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        stats = self._extras.get("total") or {}
+        return {"kg_per_km": stats.get("kgPerKm")}
+
+
+class YadeaWeeklyPowerSensor(YadeaEntity):
+    """Rolling 7-day charge / consumption sum (kWh)."""
+
+    _attr_device_class = SensorDeviceClass.ENERGY
+    _attr_state_class = SensorStateClass.TOTAL
+    _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+
+    def __init__(self, coordinator, vin: str, bike: dict, kind: str) -> None:
+        super().__init__(coordinator, vin, bike, f"weekly_power_{kind}")
+        self._kind = kind  # "charge" | "consume"
+        self._attr_translation_key = (
+            "weekly_charge" if kind == "charge" else "weekly_consume"
+        )
+
+    @property
+    def native_value(self) -> float | None:
+        records = self._extras.get("power_week") or []
+        if not records:
+            return None
+        key = "powerCharge" if self._kind == "charge" else "powerConsume"
+        total = sum(
+            v for r in records if (v := _to_float(r.get(key))) is not None
+        )
+        return round(total, 2)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        records = self._extras.get("power_week") or []
+        return {
+            "days": [
+                {"date": r.get("recordDate")} for r in reversed(records)
+            ],
+        }
+
+
 async def async_setup_entry(
     hass: HomeAssistant,
     entry: ConfigEntry,
@@ -249,9 +377,15 @@ async def async_setup_entry(
                 YadeaLastReportSensor(coordinator, vin, bike),
                 YadeaBatteryCountSensor(coordinator, vin, bike),
                 YadeaIotDaysSensor(coordinator, vin, bike),
+                YadeaIotExpireSensor(coordinator, vin, bike),
+                YadeaVehicleInfoSensor(coordinator, vin, bike),
                 YadeaMonthMileageSensor(coordinator, vin, bike),
+                YadeaTotalMileageSensor(coordinator, vin, bike),
+                YadeaTotalCO2Sensor(coordinator, vin, bike),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "charge"),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "consume"),
+                YadeaWeeklyPowerSensor(coordinator, vin, bike, "charge"),
+                YadeaWeeklyPowerSensor(coordinator, vin, bike, "consume"),
             ]
         )
     async_add_entities(entities)

@@ -22,8 +22,26 @@
 | 最后上报时间 (last_report) | 云端快照时间 | 快照 `updateTime` |
 | 电池数量 (battery_count) | 电池组数 | 快照 `batteryCount` |
 | 物联卡剩余天数 (iot_days) | 4G 卡到期天数 | 快照 `iotExpireDays` |
+| 物联卡到期日 (iot_expire) | 到期日期 | 快照 `iotCardExpireTime` |
+| 车辆信息 (vehicle_info) | 诊断实体：型号/颜色/MAC/蓝牙名/ICCID/绑定日期/保修等属性 | 车辆快照 |
 | 本月里程 (month_mileage) | km | 里程统计接口 |
+| 累计里程 (total_mileage) | km | `total-mileage/calc/co2` |
+| 累计碳减排 (total_co2) | kg（附 kgPerKm 属性） | `total-mileage/calc/co2` |
 | 昨日用电 / 昨日充电 | kWh | 每日用电统计 |
+| 近7天用电 / 近7天充电 | kWh（7 天合计，附逐日明细属性） | 每日用电统计 ×7 |
+
+设备页会显示车辆官方图片（`imgUrl`）。
+
+### ⚠️ 关于账号互踢（重要）
+
+雅迪云端**同一账号只允许一个活跃会话**：HA 重新登录会使手机 App 掉线，反之亦然。
+本集成的缓解措施：token 持久化存储，HA 重启/重载**不会**触发重新登录，
+仅在 token 真正失效时才重登一次。但如果你经常在 App 上手动退出/切换登录，
+仍可能互相影响。
+
+**推荐做法**：注册一个新的雅迪账号（小号），在 App 里通过
+**"家人共享 / 亲情号"** 把车辆分享给小号，HA 使用小号登录——
+主账号 App 完全不受影响。
 
 ### 暂不支持
 

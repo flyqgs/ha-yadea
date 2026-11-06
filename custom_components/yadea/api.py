@@ -55,6 +55,10 @@ class YadeaApi:
         self._session = session
         self.token: str | None = None
         self.token_expire: int | None = None  # epoch seconds if provided
+        # Optional async callback fired after every successful login,
+        # used to persist the token so HA restarts don't re-login
+        # (re-login kicks the mobile app session — single active session).
+        self.token_callback: Any = None
 
     # ---------- low level ----------
 
@@ -71,6 +75,8 @@ class YadeaApi:
         self.token_expire = data.get("tokenExpire")
         if not self.token:
             raise YadeaAuthError("登录成功但响应中没有 token")
+        if self.token_callback is not None:
+            await self.token_callback(self.token)
         return data
 
     async def _user_post(self, path: str, payload: dict) -> dict:
@@ -170,6 +176,32 @@ class YadeaApi:
         records = (data or {}).get("records") or []
         return records[0] if records else None
 
+    async def get_power_history(self, vin: str, size: int = 7) -> list[dict]:
+        """Latest N daily power records, newest first (powerCharge/powerConsume kWh)."""
+        try:
+            data = await self._wg_call(
+                "POST",
+                "/batt-power-record/statistics/page",
+                data={"current": 1, "size": size, "vin": vin},
+            )
+        except YadeaError as err:
+            LOGGER.debug("power history failed for %s: %s", vin, err)
+            return []
+        return (data or {}).get("records") or []
+
+    async def get_total_mileage_co2(self, vin: str) -> dict:
+        """Lifetime totals: {vehicleTotalMileage, totalCO2, kgPerKm}."""
+        try:
+            data = await self._wg_call(
+                "GET",
+                "/vehicle-base/track-ride-meter/total-mileage/calc/co2",
+                params={"vin": vin},
+            )
+        except YadeaError as err:
+            LOGGER.debug("total mileage/co2 failed for %s: %s", vin, err)
+            return {}
+        return data or {}
+
     async def get_month_mileage(self, vin: str) -> float | None:
         """Current-month mileage (km), best effort."""
         try:
@@ -204,11 +236,15 @@ class YadeaApi:
         for bike in bikes:
             vin = str(bike.get("vin", ""))
             extra: dict[str, Any] = {}
-            power = await self.get_yesterday_power(vin)
-            if power:
-                extra["power"] = power
+            history = await self.get_power_history(vin)
+            if history:
+                extra["power"] = history[0]  # newest day
+                extra["power_week"] = history
             mileage = await self.get_month_mileage(vin)
             if mileage is not None:
                 extra["month_mileage"] = mileage
+            stats = await self.get_total_mileage_co2(vin)
+            if stats:
+                extra["total"] = stats
             result["extras"][vin] = extra
         return result

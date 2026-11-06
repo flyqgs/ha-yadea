@@ -35,9 +35,15 @@
       "last_report": {"name": "最后上报时间"},
       "battery_count": {"name": "电池数量"},
       "iot_days": {"name": "物联卡剩余天数"},
+      "iot_expire": {"name": "物联卡到期日"},
+      "vehicle_info": {"name": "车辆信息"},
       "month_mileage": {"name": "本月里程"},
+      "total_mileage": {"name": "累计里程"},
+      "total_co2": {"name": "累计碳减排"},
       "daily_consume": {"name": "昨日用电"},
-      "daily_charge": {"name": "昨日充电"}
+      "daily_charge": {"name": "昨日充电"},
+      "weekly_consume": {"name": "近7天用电"},
+      "weekly_charge": {"name": "近7天充电"}
     }
   }
 }
