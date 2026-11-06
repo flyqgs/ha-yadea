@@ -49,21 +49,31 @@ class YadeaVehicleImage(ImageEntity):
         return True
 
     async def async_added_to_hass(self) -> None:
-        """Fetch the picture once added."""
+        """Fetch the picture once added.
+
+        The Yadea CDN serves the PNG with Content-Type
+        ``application/octet-stream``; the stock ``async_load_image_from_url``
+        helper silently rejects non ``image/*`` responses, so we download
+        manually and sniff the magic bytes instead.
+        """
         await super().async_added_to_hass()
         if not self._url:
             return
         try:
-            loader = getattr(self, "async_load_image_from_url", None)
-            if loader is not None:
-                # Official helper (stores bytes + last_updated, handles content type)
-                await loader(self._url)
-            else:
-                # Fallback for older ImageEntity implementations
-                session = async_get_clientsession(self.hass)
-                resp = await session.get(self._url)
-                self._image = await resp.read()
+            session = async_get_clientsession(self.hass)
+            resp = await session.get(self._url)
+            data = await resp.read()
+            is_png = data[:4] == b"\x89PNG"
+            is_jpeg = data[:3] == b"\xff\xd8\xff"
+            if resp.status == 200 and (is_png or is_jpeg):
+                self._image = data
+                self._content_type = "image/png" if is_png else "image/jpeg"
                 self._attr_image_last_updated = dt_util.utcnow()
+                self.async_write_ha_state()
+            else:
+                LOGGER.warning(
+                    "车辆图片响应异常 (%s): http=%s bytes=%s", self.vin, resp.status, len(data)
+                )
         except Exception as err:  # noqa: BLE001 - picture is cosmetic
             LOGGER.warning("加载车辆图片失败 (%s): %s", self.vin, err)
 
