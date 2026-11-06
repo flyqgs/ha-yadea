@@ -157,6 +157,7 @@ views:
           top: 6%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '电量 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
         style:
@@ -171,6 +172,7 @@ views:
           top: 20%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '续航 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
         style:
@@ -185,6 +187,7 @@ views:
           top: 34%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '本月 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
         style:
@@ -199,6 +202,7 @@ views:
           top: 48%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '累计 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
         style:
@@ -213,6 +217,7 @@ views:
           top: 62%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '碳减排 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
         style:
@@ -227,6 +232,7 @@ views:
           top: 90%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '上报 '
     - type: heading
       heading: 白鲨Ⅱ-G PRO
       icon: mdi:motorbike
@@ -290,6 +296,7 @@ views:
           top: 6%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '电量 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
         style:
@@ -304,6 +311,7 @@ views:
           top: 20%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '续航 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
         style:
@@ -318,6 +326,7 @@ views:
           top: 34%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '本月 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
         style:
@@ -332,6 +341,7 @@ views:
           top: 48%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '累计 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
         style:
@@ -346,6 +356,7 @@ views:
           top: 62%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '碳减排 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
         style:
@@ -360,6 +371,7 @@ views:
           top: 90%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '上报 '
     - type: heading
       heading: 冠能龙霆70
       icon: mdi:motorbike
@@ -458,6 +470,7 @@ views:
           top: 6%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '电量 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
         style:
@@ -472,6 +485,7 @@ views:
           top: 20%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '续航 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
         style:
@@ -486,6 +500,7 @@ views:
           top: 34%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '本月 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
         style:
@@ -500,6 +515,7 @@ views:
           top: 48%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '累计 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
         style:
@@ -514,6 +530,7 @@ views:
           top: 62%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '碳减排 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
         style:
@@ -528,6 +545,7 @@ views:
           top: 90%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '上报 '
     - type: picture-elements
       image_entity: image.long_ting_70_y_g
       title: 冠能龙霆70
@@ -546,6 +564,7 @@ views:
           top: 6%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '电量 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
         style:
@@ -560,6 +579,7 @@ views:
           top: 20%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '续航 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
         style:
@@ -574,6 +594,7 @@ views:
           top: 34%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '本月 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
         style:
@@ -588,6 +609,7 @@ views:
           top: 48%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '累计 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
         style:
@@ -602,6 +624,7 @@ views:
           top: 62%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '碳减排 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
         style:
@@ -616,3 +639,4 @@ views:
           top: 90%
           left: 2%
           transform: translate(0, -50%)
+        prefix: '上报 '
