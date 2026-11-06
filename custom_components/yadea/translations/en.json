@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Yadea account",
+        "description": "Enter the phone number and password used in the Yadea Smart app",
+        "data": {
+          "account": "Phone number",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid account or password",
+      "cannot_connect": "Cannot connect to the Yadea cloud, try again later"
+    },
+    "abort": {
+      "already_configured": "Account already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Yadea options",
+        "data": {
+          "scan_interval": "Polling interval (seconds, 30-600)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {"name": "Battery"},
+      "range": {"name": "Remaining range"},
+      "last_report": {"name": "Last report"},
+      "battery_count": {"name": "Battery count"},
+      "iot_days": {"name": "IoT days remaining"},
+      "month_mileage": {"name": "Mileage this month"},
+      "daily_consume": {"name": "Yesterday consumption"},
+      "daily_charge": {"name": "Yesterday charge"}
+    }
+  }
+}

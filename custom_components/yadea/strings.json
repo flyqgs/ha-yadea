@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "雅迪智行账号",
+        "description": "输入雅迪智行 App 的手机号和密码（与 App 登录一致）",
+        "data": {
+          "account": "手机号",
+          "password": "密码"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "账号或密码错误（或该手机号未注册雅迪智行）",
+      "cannot_connect": "无法连接雅迪云端，请稍后重试"
+    },
+    "abort": {
+      "already_configured": "该账号已配置"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Yadea 选项",
+        "data": {
+          "scan_interval": "轮询间隔（秒，30-600）"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "battery": {"name": "电量"},
+      "range": {"name": "剩余里程"},
+      "last_report": {"name": "最后上报时间"},
+      "battery_count": {"name": "电池数量"},
+      "iot_days": {"name": "物联卡剩余天数"},
+      "month_mileage": {"name": "本月里程"},
+      "daily_consume": {"name": "昨日用电"},
+      "daily_charge": {"name": "昨日充电"}
+    }
+  }
+}
