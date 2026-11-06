@@ -59,10 +59,19 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
 
     _attr_has_entity_name = True
 
-    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+    def __init__(
+        self,
+        coordinator: YadeaCoordinator,
+        vin: str,
+        bike: dict,
+        entity_key: str,
+    ) -> None:
         super().__init__(coordinator)
         self.vin = vin
         self._bike = bike
+        # 全局唯一 ID：VIN 出厂唯一 + 实体类型，重装/重载后保持稳定，
+        # 使实体可归入对应车辆设备并在 UI 中管理
+        self._attr_unique_id = f"{vin}_{entity_key}"
 
     @property
     def _current(self) -> dict:
@@ -102,6 +111,9 @@ class YadeaBatterySensor(YadeaEntity):
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_translation_key = "battery"
 
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "battery")
+
     @property
     def native_value(self) -> int | None:
         soc = self._current.get("soc1")
@@ -116,6 +128,9 @@ class YadeaRangeSensor(YadeaEntity):
     _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
     _attr_translation_key = "range"
 
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "range")
+
     @property
     def native_value(self) -> float | None:
         return _to_float(self._current.get("remMileage"))
@@ -128,6 +143,9 @@ class YadeaLastReportSensor(YadeaEntity):
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_translation_key = "last_report"
 
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "last_report")
+
     @property
     def native_value(self) -> datetime | None:
         dt = _parse_cn_time(self._current.get("updateTime"))
@@ -139,6 +157,9 @@ class YadeaBatteryCountSensor(YadeaEntity):
 
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_translation_key = "battery_count"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "battery_count")
 
     @property
     def native_value(self) -> int | None:
@@ -153,6 +174,9 @@ class YadeaIotDaysSensor(YadeaEntity):
     _attr_native_unit_of_measurement = UnitOfTime.DAYS
     _attr_translation_key = "iot_days"
 
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "iot_days")
+
     @property
     def native_value(self) -> int | None:
         value = self._current.get("iotExpireDays")
@@ -165,6 +189,9 @@ class YadeaMonthMileageSensor(YadeaEntity):
     _attr_device_class = SensorDeviceClass.DISTANCE
     _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
     _attr_translation_key = "month_mileage"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "month_mileage")
 
     @property
     def native_value(self) -> float | None:
@@ -179,7 +206,7 @@ class YadeaDailyPowerSensor(YadeaEntity):
     _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
 
     def __init__(self, coordinator, vin: str, bike: dict, kind: str) -> None:
-        super().__init__(coordinator, vin, bike)
+        super().__init__(coordinator, vin, bike, f"daily_power_{kind}")
         self._kind = kind  # "charge" | "consume"
         self._attr_translation_key = (
             "daily_charge" if kind == "charge" else "daily_consume"
