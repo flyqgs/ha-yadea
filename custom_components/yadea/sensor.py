@@ -72,6 +72,8 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
         # 全局唯一 ID：VIN 出厂唯一 + 实体类型，重装/重载后保持稳定，
         # 使实体可归入对应车辆设备并在 UI 中管理
         self._attr_unique_id = f"{vin}_{entity_key}"
+        # 官方车辆图片（实体级，DeviceInfo 不支持 picture_url 参数）
+        self._attr_entity_picture_url = bike.get("imgUrl") or None
 
     @property
     def _current(self) -> dict:
@@ -94,7 +96,6 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
             manufacturer="Yadea 雅迪",
             model=bike.get("modelName"),
             serial_number=self.vin,
-            picture_url=bike.get("imgUrl") or None,
         )
 
     @property
