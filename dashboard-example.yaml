@@ -1,4 +1,4 @@
-# 雅迪电动车仪表盘 - 3 套视图方案：总览·经典 / 精简总览（原生磁贴）/ 状态速览（Markdown 浓缩）
+# 雅迪电动车仪表盘 - 视图：总览·经典 / 精简总览（磁贴+车辆图浮动信息）/ 状态速览（全屏双车图文卡）
 title: 雅迪电动车
 views:
 - title: 总览 · 经典
@@ -140,6 +140,88 @@ views:
   sections:
   - type: grid
     cards:
+    - type: picture-elements
+      image_entity: image.bai_sha_ii_g
+      title: 白鲨Ⅱ-G PRO
+      elements:
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_battery
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 6%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_remaining_range
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 20%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_mileage_this_month
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 34%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_total_mileage
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 48%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_total_co2_saved
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 62%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_last_report
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 90%
+          left: 2%
     - type: heading
       heading: 白鲨Ⅱ-G PRO
       icon: mdi:motorbike
@@ -185,6 +267,88 @@ views:
       color: grey
   - type: grid
     cards:
+    - type: picture-elements
+      image_entity: image.long_ting_70_y_g
+      title: 冠能龙霆70
+      elements:
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_battery
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 6%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_remaining_range
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 20%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_mileage_this_month
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 34%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_total_mileage
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 48%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_total_co2_saved
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 62%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_last_report
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 90%
+          left: 2%
     - type: heading
       heading: 冠能龙霆70
       icon: mdi:motorbike
@@ -230,9 +394,6 @@ views:
       color: grey
   - type: grid
     cards:
-    - type: heading
-      heading: 白鲨Ⅱ · 诊断
-      icon: mdi:stethoscope
     - type: tile
       entity: sensor.bai_sha_ii_g_battery_count
       name: 电池数量
@@ -246,16 +407,8 @@ views:
       entity: sensor.bai_sha_ii_g_iot_card_expires
       name: 物联卡到期
       icon: mdi:calendar-clock
-    - type: tile
-      entity: image.bai_sha_ii_g
-      name: 车辆图片
-      icon: mdi:image-outline
-      color: grey
   - type: grid
     cards:
-    - type: heading
-      heading: 龙霆70 · 诊断
-      icon: mdi:stethoscope
     - type: tile
       entity: sensor.long_ting_70_y_g_battery_count
       name: 电池数量
@@ -269,11 +422,6 @@ views:
       entity: sensor.long_ting_70_y_g_iot_card_expires
       name: 物联卡到期
       icon: mdi:calendar-clock
-    - type: tile
-      entity: image.long_ting_70_y_g
-      name: 车辆图片
-      icon: mdi:image-outline
-      color: grey
 - title: 状态速览
   path: glance
   icon: mdi:text-box-check-outline
@@ -281,51 +429,167 @@ views:
   cards:
   - type: horizontal-stack
     cards:
-    - type: vertical-stack
-      cards:
-      - type: markdown
-        content: '### 🛵 白鲨Ⅱ-G PRO
-
-
-          **🔋 电量** `{{ states(''sensor.bai_sha_ii_g_battery'') }}` %
-
-          **🛣️ 续航** `{{ states(''sensor.bai_sha_ii_g_remaining_range'') }}` km
-
-          **📅 本月里程** `{{ states(''sensor.bai_sha_ii_g_mileage_this_month'') }}` km
-
-          **🧮 累计里程** `{{ states(''sensor.bai_sha_ii_g_total_mileage'') }}` km
-
-          **🌱 碳减排** `{{ states(''sensor.bai_sha_ii_g_total_co2_saved'') }}` kg
-
-          **⚡ 近7天充电** `{{ states(''sensor.bai_sha_ii_g_7_day_charge'') }}` kWh
-
-          **🔌 近7天用电** `{{ states(''sensor.bai_sha_ii_g_7_day_consumption'') }}` kWh
-
-
-          *最后上报: {{ states(''sensor.bai_sha_ii_g_last_report'') }}*'
-      - type: picture
-        image_entity: image.bai_sha_ii_g
-    - type: vertical-stack
-      cards:
-      - type: markdown
-        content: '### 🏍️ 冠能龙霆70
-
-
-          **🔋 电量** `{{ states(''sensor.long_ting_70_y_g_battery'') }}` %
-
-          **🛣️ 续航** `{{ states(''sensor.long_ting_70_y_g_remaining_range'') }}` km
-
-          **📅 本月里程** `{{ states(''sensor.long_ting_70_y_g_mileage_this_month'') }}` km
-
-          **🧮 累计里程** `{{ states(''sensor.long_ting_70_y_g_total_mileage'') }}` km
-
-          **🌱 碳减排** `{{ states(''sensor.long_ting_70_y_g_total_co2_saved'') }}` kg
-
-          **⚡ 近7天充电** `{{ states(''sensor.long_ting_70_y_g_7_day_charge'') }}` kWh
-
-          **🔌 近7天用电** `{{ states(''sensor.long_ting_70_y_g_7_day_consumption'') }}` kWh
-
-
-          *最后上报: {{ states(''sensor.long_ting_70_y_g_last_report'') }}*'
-      - type: picture
-        image_entity: image.long_ting_70_y_g
+    - type: picture-elements
+      image_entity: image.bai_sha_ii_g
+      title: 白鲨Ⅱ-G PRO
+      elements:
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_battery
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 6%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_remaining_range
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 20%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_mileage_this_month
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 34%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_total_mileage
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 48%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_total_co2_saved
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 62%
+          left: 2%
+      - type: state-label
+        entity: sensor.bai_sha_ii_g_last_report
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 90%
+          left: 2%
+    - type: picture-elements
+      image_entity: image.long_ting_70_y_g
+      title: 冠能龙霆70
+      elements:
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_battery
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 6%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_remaining_range
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 20%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_mileage_this_month
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 34%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_total_mileage
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 48%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_total_co2_saved
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 62%
+          left: 2%
+      - type: state-label
+        entity: sensor.long_ting_70_y_g_last_report
+        style:
+          color: white
+          background: rgba(20,30,40,0.55)
+          border-radius: 16px
+          padding: 6px 12px
+          font-weight: '600'
+          font-size: 105%
+          backdrop-filter: blur(4px)
+          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          top: 90%
+          left: 2%
