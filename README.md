@@ -34,12 +34,22 @@
 
 ### 仪表盘美化示例
 
-仓库里的 [`dashboard-example.yaml`](dashboard-example.yaml) 含 5 个视图：
-**总览·经典**（纯核心卡片）、**精简总览**、**状态速览**（图文融合）、
-**进阶版**（mushroom + mini-graph）与 **旗舰版**（深色 HUD 控制台，
-含双车 hero 卡、7 天骑行条形图、双车对比镜像条、能耗网格与车辆档案，
-需 [card-mod](https://github.com/thomasloven/lovelace-card-mod)）。
-复制到自定义仪表盘并替换实体 ID 即可。
+仓库里的 [`dashboard-example.yaml`](dashboard-example.yaml) 含 5 个视图，**统一深色主题**
+（同一套卡面渐变 / 描边 / 22~24px 圆角 / 蓝青强调色 / 深色页面背景）：
+
+| 视图 | path | 内容 | 依赖 |
+|---|---|---|---|
+| 总览 · 经典 | `classic` | 车辆图 + 双仪表盘 + 里程实体 + 能耗列表 | card-mod |
+| 精简总览 | `compact` | 每车 6 枚悬浮标签 + 磁贴矩阵（sections 4 列） | card-mod |
+| 状态速览 | `glance` | 双车图文融合大图（panel 视图） | card-mod |
+| 进阶版 | `advanced` | mushroom hero + chips + mini-graph 趋势 | card-mod + mushroom + mini-graph-card |
+| 旗舰版 | `pro` | HUD 控制台：hero、7 天骑行条形图、对比镜像条、能耗网格、车辆档案 | card-mod |
+
+统一深色主题靠 card-mod 给内置卡片注入 CSS 变量实现（`--ha-card-background`、
+`--primary-text-color`、`--state-icon-color` 等），因此**浅色主题下也不会出现深底深字**。
+安装 [card-mod](https://github.com/thomasloven/lovelace-card-mod) 后，把
+`dashboard-example.yaml` 整段贴进「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，
+按自己车辆替换实体 ID 前缀即可。
 
 ![旗舰版预览](docs/pro-view-preview.png)
 

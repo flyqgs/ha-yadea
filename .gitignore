@@ -5,3 +5,5 @@ __pycache__/
 yadea_token.json
 .gh_token
 .DS_Store
+views-dark.yaml
+gen_dark_views.py

@@ -1,13 +1,33 @@
+# 雅迪智行 · Home Assistant 仪表盘示例（5 视图统一深色主题）
+# 依赖：card-mod；进阶版另需 mushroom + mini-graph-card
+# 用法：整段贴进「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，替换实体 ID 前缀即可
 title: 雅迪电动车
 views:
 - title: 总览 · 经典
   path: classic
+  icon: mdi:view-dashboard
+  background: 'radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)'
   cards:
   - type: vertical-stack
     cards:
+    - type: heading
+      heading: 白鲨Ⅱ-G PRO
+      icon: mdi:motorbike-electric
+      heading_style: title
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: picture
-      title: 白鲨Ⅱ-G PRO
       image_entity: image.bai_sha_ii_g
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; }}'
     - type: horizontal-stack
       cards:
       - type: gauge
@@ -15,32 +35,102 @@ views:
         name: 电量
         min: 0
         max: 100
+        needle: false
         severity:
           green: 50
           yellow: 20
           red: 0
-        needle: false
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 20px;
+              box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+              overflow: hidden;
+            }
       - type: gauge
         entity: sensor.bai_sha_ii_g_remaining_range
         name: 续航 (km)
         min: 0
         max: 200
-        severity:
-          green: 100
-          yellow: 50
-          red: 0
         needle: false
+        severity:
+          green: 50
+          yellow: 20
+          red: 0
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 20px;
+              box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+              overflow: hidden;
+            }
     - type: horizontal-stack
       cards:
       - type: entity
         entity: sensor.bai_sha_ii_g_mileage_this_month
-        name: 本月里程 (km)
+        name: 本月 (km)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
       - type: entity
         entity: sensor.bai_sha_ii_g_total_mileage
-        name: 累计里程 (km)
+        name: 累计 (km)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
       - type: entity
         entity: sensor.bai_sha_ii_g_total_co2_saved
         name: 碳减排 (kg)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
     - type: entities
       title: 能耗与状态
       entities:
@@ -54,11 +144,42 @@ views:
         name: 近7天用电 (kWh)
       - entity: sensor.bai_sha_ii_g_last_report
         name: 最后上报
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-card-background: transparent;
+            --primary-text-color: #f1f5f9;
+            --secondary-text-color: #94a3b8;
+            --divider-color: rgba(148,163,184,0.16);
+            --state-icon-color: #7dd3fc;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+            overflow: hidden;
+          }
+          ha-card .card-header, ha-card h1, ha-card h2 { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .4px; }
+          ha-card .card-content { padding-top: 4px; }
   - type: vertical-stack
     cards:
+    - type: heading
+      heading: 冠能龙霆70
+      icon: mdi:motorbike-electric
+      heading_style: title
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: picture
-      title: 冠能龙霆70 都市劲享版
       image_entity: image.long_ting_70_y_g
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; }}'
     - type: horizontal-stack
       cards:
       - type: gauge
@@ -66,32 +187,102 @@ views:
         name: 电量
         min: 0
         max: 100
+        needle: false
         severity:
           green: 50
           yellow: 20
           red: 0
-        needle: false
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 20px;
+              box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+              overflow: hidden;
+            }
       - type: gauge
         entity: sensor.long_ting_70_y_g_remaining_range
         name: 续航 (km)
         min: 0
         max: 100
+        needle: false
         severity:
           green: 50
           yellow: 20
           red: 0
-        needle: false
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 20px;
+              box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+              overflow: hidden;
+            }
     - type: horizontal-stack
       cards:
       - type: entity
         entity: sensor.long_ting_70_y_g_mileage_this_month
-        name: 本月里程 (km)
+        name: 本月 (km)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
       - type: entity
         entity: sensor.long_ting_70_y_g_total_mileage
-        name: 累计里程 (km)
+        name: 累计 (km)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
       - type: entity
         entity: sensor.long_ting_70_y_g_total_co2_saved
         name: 碳减排 (kg)
+        card_mod:
+          style: |-
+            ha-card {
+              --ha-card-background: transparent;
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              --divider-color: rgba(148,163,184,0.16);
+              --state-icon-color: #7dd3fc;
+              background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+              border: 1px solid rgba(120,160,255,0.12);
+              border-radius: 18px;
+              box-shadow: 0 8px 22px rgba(2,6,23,0.35);
+              overflow: hidden;
+            }
     - type: entities
       title: 能耗与状态
       entities:
@@ -105,6 +296,22 @@ views:
         name: 近7天用电 (kWh)
       - entity: sensor.long_ting_70_y_g_last_report
         name: 最后上报
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-card-background: transparent;
+            --primary-text-color: #f1f5f9;
+            --secondary-text-color: #94a3b8;
+            --divider-color: rgba(148,163,184,0.16);
+            --state-icon-color: #7dd3fc;
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 22px;
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+            overflow: hidden;
+          }
+          ha-card .card-header, ha-card h1, ha-card h2 { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .4px; }
+          ha-card .card-content { padding-top: 4px; }
   - type: entities
     title: 车辆详情
     entities:
@@ -126,16 +333,28 @@ views:
       name: 白鲨Ⅱ 物联卡到期日
     - entity: sensor.long_ting_70_y_g_iot_card_expires
       name: 龙霆70 物联卡到期日
-    - entity: image.bai_sha_ii_g
-      name: 白鲨Ⅱ 图片实体
-    - entity: image.long_ting_70_y_g
-      name: 龙霆70 图片实体
-  icon: mdi:view-dashboard
+    card_mod:
+      style: |-
+        ha-card {
+          --ha-card-background: transparent;
+          --primary-text-color: #f1f5f9;
+          --secondary-text-color: #94a3b8;
+          --divider-color: rgba(148,163,184,0.16);
+          --state-icon-color: #7dd3fc;
+          background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+          border: 1px solid rgba(120,160,255,0.12);
+          border-radius: 22px;
+          box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+          overflow: hidden;
+        }
+        ha-card .card-header, ha-card h1, ha-card h2 { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .4px; }
+        ha-card .card-content { padding-top: 4px; }
 - title: 精简总览
   path: compact
   icon: mdi:view-grid-plus
   type: sections
   max_columns: 4
+  background: 'radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)'
   sections:
   - type: grid
     cards:
@@ -145,98 +364,116 @@ views:
       elements:
       - type: state-label
         entity: sensor.bai_sha_ii_g_battery
+        prefix: '电量 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '电量 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
+        prefix: '续航 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '续航 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
+        prefix: '本月 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '本月 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
+        prefix: '累计 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '累计 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
+        prefix: '碳减排 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '碳减排 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
+        prefix: '上报 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '上报 '
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; --primary-text-color: #f1f5f9; --ha-card-header-color: #f8fafc; --ha-card-header-font-size: 16px; }'
     - type: heading
       heading: 白鲨Ⅱ-G PRO
       icon: mdi:motorbike
-      heading_style: title
+      heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: horizontal-stack
       cards:
       - type: tile
@@ -244,21 +481,29 @@ views:
         name: 电量
         icon: mdi:battery-high
         color: green
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.bai_sha_ii_g_remaining_range
         name: 续航
         icon: mdi:map-marker-distance
         color: blue
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: horizontal-stack
       cards:
       - type: tile
         entity: sensor.bai_sha_ii_g_mileage_this_month
         name: 本月里程
         icon: mdi:road-variant
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.bai_sha_ii_g_total_mileage
         name: 累计里程
         icon: mdi:counter
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: horizontal-stack
       cards:
       - type: tile
@@ -266,16 +511,22 @@ views:
         name: 碳减排
         icon: mdi:leaf
         color: green
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.bai_sha_ii_g_daily_mileage_7_day
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.bai_sha_ii_g_last_report
       name: 最后上报
       icon: mdi:clock-check-outline
       color: grey
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
   - type: grid
     cards:
     - type: picture-elements
@@ -284,98 +535,116 @@ views:
       elements:
       - type: state-label
         entity: sensor.long_ting_70_y_g_battery
+        prefix: '电量 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '电量 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
+        prefix: '续航 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '续航 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
+        prefix: '本月 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '本月 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
+        prefix: '累计 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '累计 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
+        prefix: '碳减排 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '碳减排 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
+        prefix: '上报 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '上报 '
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; --primary-text-color: #f1f5f9; --ha-card-header-color: #f8fafc; --ha-card-header-font-size: 16px; }'
     - type: heading
       heading: 冠能龙霆70
       icon: mdi:motorbike
-      heading_style: title
+      heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: horizontal-stack
       cards:
       - type: tile
@@ -383,21 +652,29 @@ views:
         name: 电量
         icon: mdi:battery-high
         color: green
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.long_ting_70_y_g_remaining_range
         name: 续航
         icon: mdi:map-marker-distance
         color: blue
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: horizontal-stack
       cards:
       - type: tile
         entity: sensor.long_ting_70_y_g_mileage_this_month
         name: 本月里程
         icon: mdi:road-variant
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.long_ting_70_y_g_total_mileage
         name: 累计里程
         icon: mdi:counter
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: horizontal-stack
       cards:
       - type: tile
@@ -405,50 +682,97 @@ views:
         name: 碳减排
         icon: mdi:leaf
         color: green
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
         entity: sensor.long_ting_70_y_g_daily_mileage_7_day
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
+        card_mod:
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.long_ting_70_y_g_last_report
       name: 最后上报
       icon: mdi:clock-check-outline
       color: grey
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
   - type: grid
     cards:
+    - type: heading
+      heading: 白鲨Ⅱ · 硬件
+      icon: mdi:chip
+      heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: tile
       entity: sensor.bai_sha_ii_g_battery_count
       name: 电池数量
       icon: mdi:battery-multiple
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.bai_sha_ii_g_iot_days_remaining
       name: 物联卡天数
       icon: mdi:sim
       color: amber
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.bai_sha_ii_g_iot_card_expires
       name: 物联卡到期
       icon: mdi:calendar-clock
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
   - type: grid
     cards:
+    - type: heading
+      heading: 龙霆70 · 硬件
+      icon: mdi:chip
+      heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: tile
       entity: sensor.long_ting_70_y_g_battery_count
       name: 电池数量
       icon: mdi:battery-multiple
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.long_ting_70_y_g_iot_days_remaining
       name: 物联卡天数
       icon: mdi:sim
       color: amber
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
     - type: tile
       entity: sensor.long_ting_70_y_g_iot_card_expires
       name: 物联卡到期
       icon: mdi:calendar-clock
+      card_mod:
+        style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
 - title: 状态速览
   path: glance
   icon: mdi:text-box-check-outline
   type: panel
+  background: 'radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)'
   cards:
   - type: horizontal-stack
     cards:
@@ -458,193 +782,210 @@ views:
       elements:
       - type: state-label
         entity: sensor.bai_sha_ii_g_battery
+        prefix: '电量 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '电量 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
+        prefix: '续航 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '续航 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
+        prefix: '本月 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '本月 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
+        prefix: '累计 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '累计 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
+        prefix: '碳减排 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '碳减排 '
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
+        prefix: '上报 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '上报 '
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; --primary-text-color: #f1f5f9; --ha-card-header-color: #f8fafc; --ha-card-header-font-size: 16px; }'
     - type: picture-elements
       image_entity: image.long_ting_70_y_g
       title: 冠能龙霆70
       elements:
       - type: state-label
         entity: sensor.long_ting_70_y_g_battery
+        prefix: '电量 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '电量 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
+        prefix: '续航 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '续航 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
+        prefix: '本月 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '本月 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
+        prefix: '累计 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '累计 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
+        prefix: '碳减排 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '碳减排 '
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
+        prefix: '上报 '
         style:
-          color: white
-          background: rgba(20,30,40,0.55)
-          border-radius: 16px
+          color: '#e2e8f0'
+          background: rgba(8,13,24,0.72)
+          border: 1px solid rgba(148,163,184,0.20)
+          border-radius: 99px
           padding: 6px 12px
           font-weight: '600'
           font-size: 105%
-          backdrop-filter: blur(4px)
-          box-shadow: 0 1px 4px rgba(0,0,0,0.35)
+          backdrop-filter: blur(6px)
+          box-shadow: 0 2px 8px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
           transform: translate(0, -50%)
-        prefix: '上报 '
+      card_mod:
+        style: 'ha-card { border-radius: 24px; overflow: hidden; border: 1px solid rgba(120,160,255,0.14); box-shadow: 0 16px 36px rgba(2,6,23,0.50); background: #0b1220; --primary-text-color: #f1f5f9; --ha-card-header-color: #f8fafc; --ha-card-header-font-size: 16px; }'
 - title: 进阶版
   path: advanced
   icon: mdi:auto-fix
   type: sections
   max_columns: 2
+  background: 'radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)'
   sections:
   - type: grid
     cards:
@@ -657,11 +998,37 @@ views:
         action: more-info
         entity: sensor.bai_sha_ii_g_battery
       card_mod:
-        style: "ha-card {\n  border: none;\n  min-height: 148px;\n  padding: 14px 18px;\n  border-radius: 20px;\n  overflow: hidden;\n  background: linear-gradient(90deg, rgba(10,18,32,0.96) 0%, rgba(10,18,32,0.72)\
-          \ 42%, rgba(10,18,32,0.18) 100%), url(\"https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png\") right center / contain no-repeat, linear-gradient(135deg, #1e293b,\
-          \ #0b1220);\n  box-shadow: 0 10px 28px rgba(2,6,23,0.35);\n}\nha-card .primary {\n  color: #ffffff;\n  font-weight: 700;\n  font-size: 1.12rem;\n  letter-spacing: 0.3px;\n}\nha-card .secondary\
-          \ {\n  color: rgba(226,232,240,0.86);\n  font-size: 0.92rem;\n}\nha-card mushroom-shape-icon {\n  --icon-size: 46px;\n  background: rgba(59,130,246,0.25) !important;\n}\nha-card .icon {\n  color:\
-          \ #7dd3fc !important;\n}\n"
+        style: |-
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.16);
+            border-radius: 24px;
+            min-height: 200px;
+            padding: 4px 8px;
+            overflow: hidden;
+            background:
+              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
+              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png") right 2px center / contain no-repeat,
+              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+          }
+          ha-card .primary {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.12rem;
+            letter-spacing: 0.3px;
+          }
+          ha-card .secondary {
+            color: rgba(226,232,240,0.86);
+            font-size: 0.92rem;
+          }
+          ha-card mushroom-shape-icon {
+            --icon-size: 46px;
+            background: rgba(59,130,246,0.22) !important;
+          }
+          ha-card .icon {
+            color: #7dd3fc !important;
+          }
     - type: custom:mushroom-chips-card
       chips:
       - type: template
@@ -694,7 +1061,9 @@ views:
           entity: sensor.bai_sha_ii_g_total_co2_saved
       alignment: start
       card_mod:
-        style: 'ha-card { padding: 2px 0 0; }'
+        style: |-
+          ha-card { --chip-background: rgba(148,163,184,0.10); --primary-text-color: #e2e8f0; padding: 2px 0 0; }
+          ha-card mushroom-chips-card, ha-card .chip-container { gap: 6px; }
     - type: custom:mini-graph-card
       name: 电量趋势 · 近7天
       icon: mdi:chart-line
@@ -719,11 +1088,21 @@ views:
       - value: 101
         color: '#22c55e'
       card_mod:
-        style: 'ha-card { border-radius: 20px; }'
+        style: 'ha-card { background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important; border: 1px solid rgba(120,160,255,0.12); border-radius: 22px; box-shadow: 0 12px 30px rgba(2,6,23,0.40); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
     - type: heading
       heading: 能耗
       icon: mdi:transmission-tower
       heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #fbbf24 !important; }
     - type: custom:mushroom-chips-card
       chips:
       - type: template
@@ -756,7 +1135,9 @@ views:
           entity: sensor.bai_sha_ii_g_7_day_consumption
       alignment: start
       card_mod:
-        style: 'ha-card { padding: 0; }'
+        style: |-
+          ha-card { --chip-background: rgba(148,163,184,0.10); --primary-text-color: #e2e8f0; padding: 2px 0 0; }
+          ha-card mushroom-chips-card, ha-card .chip-container { gap: 6px; }
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-entity-card
@@ -766,7 +1147,7 @@ views:
         icon_color: grey
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
       - type: custom:mushroom-entity-card
         entity: sensor.bai_sha_ii_g_iot_days_remaining
         name: 物联卡
@@ -774,7 +1155,7 @@ views:
         icon_color: amber
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
       - type: custom:mushroom-entity-card
         entity: sensor.bai_sha_ii_g_iot_card_expires
         name: 到期日
@@ -782,7 +1163,7 @@ views:
         icon_color: blue-grey
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
   - type: grid
     cards:
     - type: custom:mushroom-template-card
@@ -794,11 +1175,37 @@ views:
         action: more-info
         entity: sensor.long_ting_70_y_g_battery
       card_mod:
-        style: "ha-card {\n  border: none;\n  min-height: 148px;\n  padding: 14px 18px;\n  border-radius: 20px;\n  overflow: hidden;\n  background: linear-gradient(90deg, rgba(10,18,32,0.96) 0%, rgba(10,18,32,0.72)\
-          \ 42%, rgba(10,18,32,0.18) 100%), url(\"https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png\") right center / contain no-repeat, linear-gradient(135deg, #1e293b,\
-          \ #0b1220);\n  box-shadow: 0 10px 28px rgba(2,6,23,0.35);\n}\nha-card .primary {\n  color: #ffffff;\n  font-weight: 700;\n  font-size: 1.12rem;\n  letter-spacing: 0.3px;\n}\nha-card .secondary\
-          \ {\n  color: rgba(226,232,240,0.86);\n  font-size: 0.92rem;\n}\nha-card mushroom-shape-icon {\n  --icon-size: 46px;\n  background: rgba(59,130,246,0.25) !important;\n}\nha-card .icon {\n  color:\
-          \ #7dd3fc !important;\n}\n"
+        style: |-
+          ha-card {
+            border: 1px solid rgba(120,160,255,0.16);
+            border-radius: 24px;
+            min-height: 200px;
+            padding: 4px 8px;
+            overflow: hidden;
+            background:
+              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
+              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png") right 2px center / contain no-repeat,
+              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+          }
+          ha-card .primary {
+            color: #ffffff;
+            font-weight: 700;
+            font-size: 1.12rem;
+            letter-spacing: 0.3px;
+          }
+          ha-card .secondary {
+            color: rgba(226,232,240,0.86);
+            font-size: 0.92rem;
+          }
+          ha-card mushroom-shape-icon {
+            --icon-size: 46px;
+            background: rgba(59,130,246,0.22) !important;
+          }
+          ha-card .icon {
+            color: #7dd3fc !important;
+          }
     - type: custom:mushroom-chips-card
       chips:
       - type: template
@@ -831,7 +1238,9 @@ views:
           entity: sensor.long_ting_70_y_g_total_co2_saved
       alignment: start
       card_mod:
-        style: 'ha-card { padding: 2px 0 0; }'
+        style: |-
+          ha-card { --chip-background: rgba(148,163,184,0.10); --primary-text-color: #e2e8f0; padding: 2px 0 0; }
+          ha-card mushroom-chips-card, ha-card .chip-container { gap: 6px; }
     - type: custom:mini-graph-card
       name: 电量趋势 · 近7天
       icon: mdi:chart-line
@@ -856,11 +1265,21 @@ views:
       - value: 101
         color: '#22c55e'
       card_mod:
-        style: 'ha-card { border-radius: 20px; }'
+        style: 'ha-card { background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important; border: 1px solid rgba(120,160,255,0.12); border-radius: 22px; box-shadow: 0 12px 30px rgba(2,6,23,0.40); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
     - type: heading
       heading: 能耗
       icon: mdi:transmission-tower
       heading_style: subtitle
+      card_mod:
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #fbbf24 !important; }
     - type: custom:mushroom-chips-card
       chips:
       - type: template
@@ -893,7 +1312,9 @@ views:
           entity: sensor.long_ting_70_y_g_7_day_consumption
       alignment: start
       card_mod:
-        style: 'ha-card { padding: 0; }'
+        style: |-
+          ha-card { --chip-background: rgba(148,163,184,0.10); --primary-text-color: #e2e8f0; padding: 2px 0 0; }
+          ha-card mushroom-chips-card, ha-card .chip-container { gap: 6px; }
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-entity-card
@@ -903,7 +1324,7 @@ views:
         icon_color: grey
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
       - type: custom:mushroom-entity-card
         entity: sensor.long_ting_70_y_g_iot_days_remaining
         name: 物联卡
@@ -911,7 +1332,7 @@ views:
         icon_color: amber
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
       - type: custom:mushroom-entity-card
         entity: sensor.long_ting_70_y_g_iot_card_expires
         name: 到期日
@@ -919,14 +1340,13 @@ views:
         icon_color: blue-grey
         layout: vertical
         card_mod:
-          style: 'ha-card { border-radius: 16px; }'
-
+          style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; }'
 - title: 旗舰版
   path: pro
   icon: mdi:crown-outline
   type: sections
   max_columns: 2
-  background: "radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)"
+  background: 'radial-gradient(1400px 800px at 12% -8%, #1b2b49 0%, #0b1220 58%, #070b14 100%)'
   sections:
   - type: grid
     cards:
@@ -974,10 +1394,15 @@ views:
       icon: mdi:chart-timeline-variant
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #60a5fa !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: markdown
       content: |
         {% set days = state_attr('sensor.bai_sha_ii_g_daily_mileage_7_day','last_7_days') or [] %}
@@ -1043,10 +1468,15 @@ views:
       icon: mdi:chart-timeline-variant
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #60a5fa !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: markdown
       content: |
         {% set days = state_attr('sensor.long_ting_70_y_g_daily_mileage_7_day','last_7_days') or [] %}
@@ -1073,10 +1503,15 @@ views:
       icon: mdi:compare-horizontal
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #60a5fa !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: markdown
       content: |
         {% set sb = states('sensor.bai_sha_ii_g_battery')|float(0) %}
@@ -1102,10 +1537,15 @@ views:
       icon: mdi:card-account-details-outline
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #60a5fa !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #60a5fa !important; }
     - type: markdown
       content: |
         {% macro a(e, k) %}{% set v = state_attr(e, k) %}{{ v if v not in [None, '', 'None'] else '—' }}{% endmacro %}
@@ -1128,10 +1568,15 @@ views:
       icon: mdi:transmission-tower
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #fbbf24 !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #fbbf24 !important; }
     - type: markdown
       content: |
         {% macro n(e, dg) %}{% set v = states(e) %}{% if v in ['unknown','unavailable','None',''] %}—{% else %}{{ (v|float(0)|round(dg))|int if dg == 0 else (v|float(0)|round(dg)) }}{% endif %}{% endmacro %}
@@ -1163,10 +1608,15 @@ views:
       icon: mdi:information-outline
       heading_style: subtitle
       card_mod:
-        style: |
-          ha-card { background: transparent !important; box-shadow: none !important; border: none !important; }
-          .title { color: #e2e8f0 !important; font-weight: 600 !important; letter-spacing: .6px; }
-          ha-icon { color: #64748b !important; }
+        style: |-
+          ha-card {
+            --ha-heading-card-title-color: #e2e8f0;
+            --ha-heading-card-subtitle-color: #94a3b8;
+            --ha-heading-card-title-font-weight: 600;
+            --ha-heading-card-subtitle-font-weight: 600;
+          }
+          .content { letter-spacing: .6px; }
+          .content ha-icon { color: #64748b !important; }
     - type: markdown
       content: |
         <div style="font-size:11px;line-height:1.9;color:#94a3b8"><div style="display:flex;gap:8px"><span style="color:#38bdf8">●</span><span>数据源为雅迪云端快照，默认 <b style="color:#cbd5e1">60 秒</b> 轮询，仅读取不写入车辆。</span></div><div style="display:flex;gap:8px"><span style="color:#22c55e">●</span><span>电量配色：<b style="color:#f87171">&lt;20%</b> 红 · <b style="color:#fbbf24">20–50%</b> 琥珀 · <b style="color:#4ade80">≥50%</b> 绿。</span></div><div style="display:flex;gap:8px"><span style="color:#a78bfa">●</span><span>逐日里程与能耗需 App 端骑行后上传，云端无记录时显示占位或“—”。</span></div></div>
