@@ -318,6 +318,56 @@ class YadeaTotalCO2Sensor(YadeaEntity):
         return {"kg_per_km": stats.get("kgPerKm")}
 
 
+class YadeaDailyMileageSensor(YadeaEntity):
+    """Daily ride mileage over the last 7 days (diagnostic).
+
+    Cloud ride records only exist when rides were tracked in the app;
+    otherwise the list stays empty and the sensor reports unknown.
+    """
+
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
+    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
+    _attr_icon = "mdi:calendar-clock"
+    _attr_translation_key = "daily_mileage"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "daily_mileage")
+
+    @staticmethod
+    def _extract(records: list[dict]) -> list[dict]:
+        """Normalize server records into {date, km} pairs (best effort)."""
+        days: list[dict] = []
+        for r in records:
+            if not isinstance(r, dict):
+                continue
+            day = km = None
+            for key, value in r.items():
+                lower = key.lower()
+                if day is None and (
+                    "start" in lower or "day" in lower or "date" in lower
+                ):
+                    day = value
+                if km is None and "mileage" in lower:
+                    km = _to_float(value)
+            days.append({"date": day, "km": km})
+        return days
+
+    @property
+    def native_value(self) -> float | None:
+        records = self._extras.get("daily_mileage") or []
+        if not records:
+            return None
+        total = sum(
+            km for d in self._extract(records) if (km := d.get("km")) is not None
+        )
+        return round(total, 2)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        records = self._extras.get("daily_mileage") or []
+        return {"last_7_days": self._extract(records), "record_count": len(records)}
+
+
 class YadeaWeeklyPowerSensor(YadeaEntity):
     """Rolling 7-day charge / consumption sum (kWh)."""
 
@@ -383,6 +433,7 @@ async def async_setup_entry(
                 YadeaMonthMileageSensor(coordinator, vin, bike),
                 YadeaTotalMileageSensor(coordinator, vin, bike),
                 YadeaTotalCO2Sensor(coordinator, vin, bike),
+                YadeaDailyMileageSensor(coordinator, vin, bike),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "charge"),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "consume"),
                 YadeaWeeklyPowerSensor(coordinator, vin, bike, "charge"),

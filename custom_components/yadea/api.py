@@ -12,6 +12,7 @@ import json
 import logging
 import time
 import urllib.parse
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import aiohttp
@@ -202,6 +203,31 @@ class YadeaApi:
             return {}
         return data or {}
 
+    async def get_daily_mileage_summary(self, vin: str, days: int = 7, smart_type: int = 2) -> list:
+        """Daily ride mileage for the last N days (summary type=1).
+
+        Empty list unless the app recorded rides (ride tracking is app-side).
+        """
+        cn = timezone(timedelta(hours=8))
+        now = datetime.now(cn)
+        try:
+            data = await self._wg_call(
+                "GET",
+                "/vehicle-base/track-ride-meter/summary",
+                params={
+                    "vin": vin,
+                    "metricType": 0,  # 0=km
+                    "type": 1,  # 1=daily
+                    "startDate": (now - timedelta(days=days - 1)).strftime("%Y-%m-%d"),
+                    "endDate": now.strftime("%Y-%m-%d"),
+                    "smartType": smart_type,
+                },
+            )
+        except YadeaError as err:
+            LOGGER.debug("daily mileage summary failed for %s: %s", vin, err)
+            return []
+        return data if isinstance(data, list) else []
+
     async def get_month_mileage(self, vin: str) -> float | None:
         """Current-month mileage (km), best effort."""
         try:
@@ -246,5 +272,12 @@ class YadeaApi:
             stats = await self.get_total_mileage_co2(vin)
             if stats:
                 extra["total"] = stats
+            try:
+                smart_type = int(bike.get("smartType", 2))
+            except (TypeError, ValueError):
+                smart_type = 2
+            daily = await self.get_daily_mileage_summary(vin, smart_type=smart_type)
+            if daily:
+                extra["daily_mileage"] = daily
             result["extras"][vin] = extra
         return result

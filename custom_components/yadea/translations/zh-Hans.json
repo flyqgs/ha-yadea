@@ -40,6 +40,7 @@
       "month_mileage": {"name": "本月里程"},
       "total_mileage": {"name": "累计里程"},
       "total_co2": {"name": "累计碳减排"},
+      "daily_mileage": {"name": "近7天每日里程"},
       "daily_consume": {"name": "昨日用电"},
       "daily_charge": {"name": "昨日充电"},
       "weekly_consume": {"name": "近7天用电"},

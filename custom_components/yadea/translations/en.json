@@ -40,6 +40,7 @@
       "month_mileage": {"name": "Mileage this month"},
       "total_mileage": {"name": "Total mileage"},
       "total_co2": {"name": "Total CO2 saved"},
+      "daily_mileage": {"name": "Daily mileage (7-day)"},
       "daily_consume": {"name": "Yesterday consumption"},
       "daily_charge": {"name": "Yesterday charge"},
       "weekly_consume": {"name": "7-day consumption"},

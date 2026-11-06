@@ -27,6 +27,7 @@
 | 本月里程 (month_mileage) | km | 里程统计接口 |
 | 累计里程 (total_mileage) | km | `total-mileage/calc/co2` |
 | 累计碳减排 (total_co2) | kg（附 kgPerKm 属性） | `total-mileage/calc/co2` |
+| 近7天每日里程 (daily_mileage) | 诊断实体，7 天合计 km + 逐日列表属性 | `track-ride-meter/summary type=1`（仅 App 记录过骑行才有数据） |
 | 昨日用电 / 昨日充电 | kWh | 每日用电统计 |
 | 近7天用电 / 近7天充电 | kWh（7 天合计，附逐日明细属性） | 每日用电统计 ×7 |
 
