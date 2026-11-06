@@ -1,4 +1,3 @@
-# 雅迪电动车仪表盘 - 视图：总览·经典 / 精简总览（磁贴+车辆图浮动信息）/ 状态速览（全屏双车图文卡）
 title: 雅迪电动车
 views:
 - title: 总览 · 经典
@@ -157,6 +156,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
         style:
@@ -170,6 +170,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
         style:
@@ -183,6 +184,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
         style:
@@ -196,6 +198,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
         style:
@@ -209,6 +212,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
         style:
@@ -222,6 +226,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
+          transform: translate(0, -50%)
     - type: heading
       heading: 白鲨Ⅱ-G PRO
       icon: mdi:motorbike
@@ -284,6 +289,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
         style:
@@ -297,6 +303,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
         style:
@@ -310,6 +317,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
         style:
@@ -323,6 +331,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
         style:
@@ -336,6 +345,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
         style:
@@ -349,6 +359,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
+          transform: translate(0, -50%)
     - type: heading
       heading: 冠能龙霆70
       icon: mdi:motorbike
@@ -446,6 +457,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_remaining_range
         style:
@@ -459,6 +471,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_mileage_this_month
         style:
@@ -472,6 +485,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_mileage
         style:
@@ -485,6 +499,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_total_co2_saved
         style:
@@ -498,6 +513,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.bai_sha_ii_g_last_report
         style:
@@ -511,6 +527,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
+          transform: translate(0, -50%)
     - type: picture-elements
       image_entity: image.long_ting_70_y_g
       title: 冠能龙霆70
@@ -528,6 +545,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 6%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_remaining_range
         style:
@@ -541,6 +559,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 20%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_mileage_this_month
         style:
@@ -554,6 +573,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 34%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_mileage
         style:
@@ -567,6 +587,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 48%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_total_co2_saved
         style:
@@ -580,6 +601,7 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 62%
           left: 2%
+          transform: translate(0, -50%)
       - type: state-label
         entity: sensor.long_ting_70_y_g_last_report
         style:
@@ -593,3 +615,4 @@ views:
           box-shadow: 0 1px 4px rgba(0,0,0,0.35)
           top: 90%
           left: 2%
+          transform: translate(0, -50%)
