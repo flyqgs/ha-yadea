@@ -1503,7 +1503,7 @@ views:
       update_interval: 30min
       series:
       - entity: sensor.bai_sha_ii_g_daily_mileage_7_day
-        type: bar
+        type: column
         name: 每日里程
         color: '#38bdf8'
         data_generator: |-
@@ -1856,7 +1856,7 @@ views:
       update_interval: 30min
       series:
       - entity: sensor.long_ting_70_y_g_daily_mileage_7_day
-        type: bar
+        type: column
         name: 每日里程
         color: '#60a5fa'
         data_generator: |-
