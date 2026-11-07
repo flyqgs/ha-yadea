@@ -43,7 +43,7 @@
 | 精简总览 | `compact` | 每车 6 枚悬浮标签 + 磁贴矩阵（sections 4 列） | card-mod |
 | 状态速览 | `glance` | 双车图文融合大图（panel 视图） | card-mod |
 | 进阶版 | `advanced` | mushroom hero + chips + mini-graph 趋势 | card-mod + mushroom + mini-graph-card |
-| 旗舰版 | `pro` | HUD 控制台：hero、7 天骑行条形图、对比镜像条、能耗网格、车辆档案 | card-mod |
+| 旗舰版 | `pro` | HUD 控制台：hero、7 天骑行条形图、双车对比、能耗与车辆档案 | card-mod + mushroom + apexcharts-card |
 
 统一深色主题靠 card-mod 给内置卡片注入 CSS 变量实现（`--ha-card-background`、
 `--primary-text-color`、`--state-icon-color` 等），因此**浅色主题下也不会出现深底深字**。
