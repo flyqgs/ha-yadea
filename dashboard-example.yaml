@@ -2,6 +2,7 @@
 # 依赖：card-mod；旗舰版/骑行轨迹另需 apexcharts-card、bar-card 与 mushroom（HACS）
 # 用法：复制到「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，替换实体 ID 前缀即可
 # v2.0.0：里程/轨迹全部来自雅迪云端骑行记录（车主账号可见）
+# 提示：想要开箱即用 + 自动发现车辆，请改用 https://github.com/flyqgs/yadea-dashboard
 title: 雅迪电动车
 views:
 - title: 总览 · 经典
@@ -1425,7 +1426,7 @@ views:
         icon_color: '#38bdf8'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1451,7 +1452,7 @@ views:
         icon_color: '#60a5fa'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1479,7 +1480,7 @@ views:
         icon_color: '#22c55e'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1505,7 +1506,7 @@ views:
         icon_color: '#f59e0b'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1637,7 +1638,7 @@ views:
       icon_color: '#22c55e'
       multiline_secondary: false
       tap_action:
-        action: more-info
+        action: none
       card_mod:
         style: |
           ha-card {
@@ -1663,7 +1664,7 @@ views:
       icon_color: '#38bdf8'
       multiline_secondary: false
       tap_action:
-        action: more-info
+        action: none
       card_mod:
         style: |
           ha-card {
@@ -1689,7 +1690,7 @@ views:
       icon_color: '#60a5fa'
       multiline_secondary: false
       tap_action:
-        action: more-info
+        action: none
       card_mod:
         style: |
           ha-card {
@@ -1831,7 +1832,7 @@ views:
         icon_color: '#38bdf8'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1857,7 +1858,7 @@ views:
         icon_color: '#60a5fa'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1885,7 +1886,7 @@ views:
         icon_color: '#22c55e'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -1911,7 +1912,7 @@ views:
         icon_color: '#f59e0b'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -2043,7 +2044,7 @@ views:
       icon_color: '#f59e0b'
       multiline_secondary: true
       tap_action:
-        action: more-info
+        action: none
       card_mod:
         style: |
           ha-card {
@@ -2069,7 +2070,7 @@ views:
       icon_color: '#f59e0b'
       multiline_secondary: true
       tap_action:
-        action: more-info
+        action: none
       card_mod:
         style: |
           ha-card {
@@ -2113,7 +2114,7 @@ views:
         icon_color: '#22d3ee'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {
@@ -2139,7 +2140,7 @@ views:
         icon_color: '#22d3ee'
         multiline_secondary: false
         tap_action:
-          action: more-info
+          action: none
         card_mod:
           style: |
             ha-card {

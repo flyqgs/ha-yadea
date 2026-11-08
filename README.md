@@ -63,6 +63,10 @@
 `dashboard-example.yaml` 整段贴进「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，
 按自己车辆替换实体 ID 前缀即可。
 
+> **开箱即用版本**：[flyqgs/yadea-dashboard](https://github.com/flyqgs/yadea-dashboard)
+> 是本仪表盘的「市场安装版」——通过 HACS / Marketplace 安装后，作为 Dashboard
+> 策略自动发现车辆并生成视图，无需替换实体前缀，还可「接管控制」自由编辑。
+
 ![旗舰版预览](docs/pro-view-preview.png)
 
 ![骑行轨迹视图](docs/track-view.png)
