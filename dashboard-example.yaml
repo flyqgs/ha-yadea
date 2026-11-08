@@ -1,5 +1,5 @@
 # 雅迪智行 · Home Assistant 仪表盘示例（5 视图统一深色主题）
-# 依赖：card-mod；旗舰版另需 apexcharts-card 与 mushroom（HACS）
+# 依赖：card-mod；旗舰版另需 apexcharts-card、bar-card 与 mushroom（HACS）
 # 用法：复制到「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，替换实体 ID 前缀即可
 title: 雅迪电动车
 views:
@@ -1351,25 +1351,70 @@ views:
   - type: grid
     cards:
     - type: markdown
-      content: "**YADEA · SMART MOTO**  \n**白鲨Ⅱ-G PRO**\n\n### {{ (states('sensor.bai_sha_ii_g_battery') if states('sensor.bai_sha_ii_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}% · 续航 {{ (states('sensor.bai_sha_ii_g_remaining_range') if states('sensor.bai_sha_ii_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km\n\n电池 {{ (states('sensor.bai_sha_ii_g_battery_count') if states('sensor.bai_sha_ii_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.bai_sha_ii_g_mileage_this_month') if states('sensor.bai_sha_ii_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.bai_sha_ii_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
+      content: "**YADEA · SMART MOTO**  \n**白鲨Ⅱ-G PRO**\n\n# {{ (states('sensor.bai_sha_ii_g_battery') if states('sensor.bai_sha_ii_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.bai_sha_ii_g_remaining_range') if states('sensor.bai_sha_ii_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.bai_sha_ii_g_battery_count') if states('sensor.bai_sha_ii_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.bai_sha_ii_g_mileage_this_month') if states('sensor.bai_sha_ii_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.bai_sha_ii_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
       card_mod:
-        style: |
+        style:
+          .: |
+            ha-card {
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              min-height: 168px;
+              border-radius: 24px;
+              overflow: hidden;
+              border: 1px solid rgba(120,160,255,0.14);
+              box-shadow: 0 16px 36px rgba(2,6,23,0.50);
+              background:
+                linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 30%),
+                linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+                url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png") right 2px center / contain no-repeat,
+                linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            }
+            ha-markdown { padding: 14px 16px; }
+            ha-markdown h1 { margin: 2px 0 4px; letter-spacing: .5px; }
+          ha-markdown $: |
+            h1 { font-size: 44px !important; font-weight: 700 !important; line-height: 1.1 !important; margin: 2px 0 6px !important; }
+            p { margin: 0.35em 0 !important; }
+            p strong:first-child { letter-spacing: 1.2px; font-size: 92%; }
+    - type: custom:bar-card
+      entities:
+      - entity: sensor.bai_sha_ii_g_battery
+        name: 白鲨Ⅱ 电量
+        icon: mdi:battery-high
+      unit_of_measurement: '%'
+      min: 0
+      max: 100
+      height: 14
+      radius: 7
+      gravity: false
+      positions:
+        icon: 'off'
+        indicator: 'off'
+        name: 'off'
+        value: inside
+      severity:
+      - color: '#ef4444'
+        from: 0
+        to: 20
+      - color: '#f59e0b'
+        from: 20
+        to: 50
+      - color: '#22c55e'
+        from: 50
+        to: 100
+      card_mod:
+        style: |-
           ha-card {
-            --primary-text-color: #f1f5f9;
-            --secondary-text-color: #94a3b8;
-            min-height: 150px;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid rgba(120,160,255,0.14);
-            box-shadow: 0 16px 36px rgba(2,6,23,0.50);
-            background:
-              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
-              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
-              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/c04653a1cc164f59b6178c7445a4dbc5.png") right 2px center / contain no-repeat,
-              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+            padding: 10px 14px 6px;
+            --primary-text-color: #94a3b8;
           }
-          ha-markdown { padding: 14px 16px; }
-          ha-markdown h3 { margin: 0.3em 0; letter-spacing: .5px; }
+          bar-card-currentbar, bar-card-backgroundbar { border-radius: 7px; }
+          bar-card-name { font-size: 12px; }
+          bar-card-value { font-size: 12px; color: #e2e8f0; }
+          bar-card-iconbar ha-icon { color: #7dd3fc; }
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
@@ -1501,13 +1546,15 @@ views:
       span:
         end: day
       update_interval: 30min
+      show:
+        loading: false
       series:
       - entity: sensor.bai_sha_ii_g_daily_mileage_7_day
         type: column
         name: 每日里程
         color: '#38bdf8'
         data_generator: |-
-          const rows = state_attr(entity, 'last_7_days') || [];
+          const rows = (entity && entity.attributes && entity.attributes.last_7_days) || [];
           return rows.map((r) => [new Date(r.date + 'T00:00:00+08:00').getTime(), Number(r.km) || 0]);
       apex_config:
         chart:
@@ -1541,6 +1588,12 @@ views:
             columnWidth: 55%
         tooltip:
           theme: dark
+        noData:
+          text: 暂无骑行记录 · App 端上传后自动显示
+          align: center
+          style:
+            color: '#94a3b8'
+            fontSize: 13px
       card_mod:
         style: |-
           ha-card {
@@ -1676,7 +1729,7 @@ views:
         | --- | --- | --- |
         | 型号 | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'model_no') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'model_no') or '—') }} |
         | 颜色 | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'color') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'color') or '—') }} |
-        | 电池类型 | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'battery_type') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'battery_type') or '—') }} |
+        | 电池数量 | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'battery_type') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'battery_type') or '—') }} |
         | 蓝牙名 | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'bluetooth_name') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'bluetooth_name') or '—') }} |
         | MAC | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'mac_address') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'mac_address') or '—') }} |
         | ICCID | {{ (state_attr('sensor.bai_sha_ii_g_vehicle_info', 'iccid') or '—') }} | {{ (state_attr('sensor.long_ting_70_y_g_vehicle_info', 'iccid') or '—') }} |
@@ -1704,25 +1757,70 @@ views:
   - type: grid
     cards:
     - type: markdown
-      content: "**YADEA · SMART MOTO**  \n**冠能龙霆70**\n\n### {{ (states('sensor.long_ting_70_y_g_battery') if states('sensor.long_ting_70_y_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}% · 续航 {{ (states('sensor.long_ting_70_y_g_remaining_range') if states('sensor.long_ting_70_y_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km\n\n电池 {{ (states('sensor.long_ting_70_y_g_battery_count') if states('sensor.long_ting_70_y_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.long_ting_70_y_g_mileage_this_month') if states('sensor.long_ting_70_y_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.long_ting_70_y_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
+      content: "**YADEA · SMART MOTO**  \n**冠能龙霆70**\n\n# {{ (states('sensor.long_ting_70_y_g_battery') if states('sensor.long_ting_70_y_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.long_ting_70_y_g_remaining_range') if states('sensor.long_ting_70_y_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.long_ting_70_y_g_battery_count') if states('sensor.long_ting_70_y_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.long_ting_70_y_g_mileage_this_month') if states('sensor.long_ting_70_y_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.long_ting_70_y_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
       card_mod:
-        style: |
+        style:
+          .: |
+            ha-card {
+              --primary-text-color: #f1f5f9;
+              --secondary-text-color: #94a3b8;
+              min-height: 168px;
+              border-radius: 24px;
+              overflow: hidden;
+              border: 1px solid rgba(120,160,255,0.14);
+              box-shadow: 0 16px 36px rgba(2,6,23,0.50);
+              background:
+                linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 30%),
+                linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
+                url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png") right 2px center / contain no-repeat,
+                linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            }
+            ha-markdown { padding: 14px 16px; }
+            ha-markdown h1 { margin: 2px 0 4px; letter-spacing: .5px; }
+          ha-markdown $: |
+            h1 { font-size: 44px !important; font-weight: 700 !important; line-height: 1.1 !important; margin: 2px 0 6px !important; }
+            p { margin: 0.35em 0 !important; }
+            p strong:first-child { letter-spacing: 1.2px; font-size: 92%; }
+    - type: custom:bar-card
+      entities:
+      - entity: sensor.long_ting_70_y_g_battery
+        name: 龙霆70 电量
+        icon: mdi:battery-high
+      unit_of_measurement: '%'
+      min: 0
+      max: 100
+      height: 14
+      radius: 7
+      gravity: false
+      positions:
+        icon: 'off'
+        indicator: 'off'
+        name: 'off'
+        value: inside
+      severity:
+      - color: '#ef4444'
+        from: 0
+        to: 20
+      - color: '#f59e0b'
+        from: 20
+        to: 50
+      - color: '#22c55e'
+        from: 50
+        to: 100
+      card_mod:
+        style: |-
           ha-card {
-            --primary-text-color: #f1f5f9;
-            --secondary-text-color: #94a3b8;
-            min-height: 150px;
-            border-radius: 24px;
-            overflow: hidden;
-            border: 1px solid rgba(120,160,255,0.14);
-            box-shadow: 0 16px 36px rgba(2,6,23,0.50);
-            background:
-              linear-gradient(0deg, rgba(8,13,24,0.85) 0%, rgba(8,13,24,0) 26%),
-              linear-gradient(90deg, rgba(8,13,24,0.99) 0%, rgba(8,13,24,0.95) 28%, rgba(8,13,24,0.30) 50%, rgba(8,13,24,0) 68%),
-              url("https://tsposs.yadeaiot.com.cn/tsp/vehicle/static/a0c7a1a5da8b4e9b820a8cd2b4ce894b.png") right 2px center / contain no-repeat,
-              linear-gradient(160deg, #16233c 0%, #0a1020 100%);
+            background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%) !important;
+            border: 1px solid rgba(120,160,255,0.12);
+            border-radius: 18px;
+            box-shadow: 0 12px 30px rgba(2,6,23,0.40);
+            padding: 10px 14px 6px;
+            --primary-text-color: #94a3b8;
           }
-          ha-markdown { padding: 14px 16px; }
-          ha-markdown h3 { margin: 0.3em 0; letter-spacing: .5px; }
+          bar-card-currentbar, bar-card-backgroundbar { border-radius: 7px; }
+          bar-card-name { font-size: 12px; }
+          bar-card-value { font-size: 12px; color: #e2e8f0; }
+          bar-card-iconbar ha-icon { color: #7dd3fc; }
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
@@ -1854,13 +1952,15 @@ views:
       span:
         end: day
       update_interval: 30min
+      show:
+        loading: false
       series:
       - entity: sensor.long_ting_70_y_g_daily_mileage_7_day
         type: column
         name: 每日里程
         color: '#60a5fa'
         data_generator: |-
-          const rows = state_attr(entity, 'last_7_days') || [];
+          const rows = (entity && entity.attributes && entity.attributes.last_7_days) || [];
           return rows.map((r) => [new Date(r.date + 'T00:00:00+08:00').getTime(), Number(r.km) || 0]);
       apex_config:
         chart:
@@ -1894,6 +1994,12 @@ views:
             columnWidth: 55%
         tooltip:
           theme: dark
+        noData:
+          text: 暂无骑行记录 · App 端上传后自动显示
+          align: center
+          style:
+            color: '#94a3b8'
+            fontSize: 13px
       card_mod:
         style: |-
           ha-card {
