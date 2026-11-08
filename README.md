@@ -57,7 +57,7 @@
 | 状态速览 | `glance` | 双车图文融合大图（panel 视图） | card-mod |
 | 进阶版 | `advanced` | mushroom hero + chips + mini-graph 趋势 | card-mod + mushroom + mini-graph-card |
 | 旗舰版 | `pro` | HUD 控制台：hero 大数字、近 7 天骑行柱状图、双车对比、能耗与车辆档案 | card-mod + mushroom + apexcharts-card + bar-card |
-| 骑行轨迹 | `track` | 今日里程大数字、今日分段明细表、近 14 天柱状图、最近路线 | card-mod + mushroom + apexcharts-card |
+| 骑行轨迹 | `track` | 双车对称两列：今日里程大数字、近 14 天柱状图、最近路线、今日分段明细表 | card-mod + mushroom + apexcharts-card |
 
 安装 [card-mod](https://github.com/thomasloven/lovelace-card-mod) 等前置卡片后，把
 `dashboard-example.yaml` 整段贴进「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，
