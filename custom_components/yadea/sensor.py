@@ -1,7 +1,9 @@
 """Sensors for the Yadea integration.
 
-每台车一个设备，实体来自车辆列表快照（soc1 电量、remMileage 剩余里程、
-updateTime 上报时间、iotExpireDays 物联卡剩余天数）+ 每日用电记录。
+每台车一个设备。数据来源两类：
+- 车辆列表快照：soc1 电量、remMileage 剩余里程、updateTime 上报时间、物联卡
+- 云端轨迹/里程接口：今日/本周/本月/累计里程、骑行时长与次数、最近一次骑行
+  （轨迹按账号归属，共享账号查不到任何记录）
 """
 from __future__ import annotations
 
@@ -89,6 +91,10 @@ class YadeaEntity(CoordinatorEntity[YadeaCoordinator], SensorEntity):
     @property
     def _extras(self) -> dict:
         return (self.coordinator.data or {}).get("extras", {}).get(self.vin, {})
+
+    @property
+    def _track(self) -> dict:
+        return self._extras.get("track") or {}
 
     @property
     def device_info(self) -> DeviceInfo:
@@ -189,47 +195,6 @@ class YadeaIotDaysSensor(YadeaEntity):
         return int(value) if value is not None else None
 
 
-class YadeaMonthMileageSensor(YadeaEntity):
-    """Current month mileage (km), best effort."""
-
-    _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
-    _attr_translation_key = "month_mileage"
-
-    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
-        super().__init__(coordinator, vin, bike, "month_mileage")
-
-    @property
-    def native_value(self) -> float | None:
-        return self._extras.get("month_mileage")
-
-
-class YadeaDailyPowerSensor(YadeaEntity):
-    """Latest daily power record (charge / consume, kWh)."""
-
-    _attr_device_class = SensorDeviceClass.ENERGY
-    _attr_state_class = SensorStateClass.TOTAL
-    _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
-
-    def __init__(self, coordinator, vin: str, bike: dict, kind: str) -> None:
-        super().__init__(coordinator, vin, bike, f"daily_power_{kind}")
-        self._kind = kind  # "charge" | "consume"
-        self._attr_translation_key = (
-            "daily_charge" if kind == "charge" else "daily_consume"
-        )
-
-    @property
-    def native_value(self) -> float | None:
-        power = self._extras.get("power") or {}
-        key = "powerCharge" if self._kind == "charge" else "powerConsume"
-        return _to_float(power.get(key))
-
-    @property
-    def extra_state_attributes(self) -> dict:
-        power = self._extras.get("power") or {}
-        return {"record_date": power.get("recordDate")}
-
-
 class YadeaIotExpireSensor(YadeaEntity):
     """IoT SIM card expiration date."""
 
@@ -285,31 +250,106 @@ class YadeaVehicleInfoSensor(YadeaEntity):
         }
 
 
-class YadeaTotalMileageSensor(YadeaEntity):
-    """Lifetime total mileage (km)."""
+# ---------------------------------------------------------------- 里程 / 轨迹
+
+
+class YadeaMileageSensor(YadeaEntity):
+    """云端里程统计（今日 / 本周 / 本月 / 累计）。"""
 
     _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
     _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
-    _attr_translation_key = "total_mileage"
+    _attr_icon = "mdi:map-marker-distance"
 
-    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
-        super().__init__(coordinator, vin, bike, "total_mileage")
+    # period -> (unique_id 后缀, translation_key, state_class)
+    # month/total 沿用 1.x 的 entity_key，保证升级后实体 ID 不变
+    _PERIODS = {
+        "today": ("today_mileage", "today_mileage", SensorStateClass.MEASUREMENT),
+        "week": ("week_mileage", "week_mileage", SensorStateClass.MEASUREMENT),
+        "month": ("month_mileage", "month_mileage", SensorStateClass.MEASUREMENT),
+        "total": ("total_mileage", "total_mileage", SensorStateClass.TOTAL_INCREASING),
+    }
+
+    def __init__(
+        self, coordinator: YadeaCoordinator, vin: str, bike: dict, period: str
+    ) -> None:
+        key, translation_key, state_class = self._PERIODS[period]
+        super().__init__(coordinator, vin, bike, key)
+        self._period = period
+        self._attr_translation_key = translation_key
+        self._attr_state_class = state_class
 
     @property
     def native_value(self) -> float | None:
-        value = _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
-        # 这些车型云端不生成骑行记录，接口恒返回 0；0 不能当作真实累计里程
-        return value if value else None
+        track = self._track
+        if not track:
+            return None
+        if self._period == "total":
+            # 没有账号累计里程时不要显示 0
+            value = (track.get("total") or {}).get("km")
+            return value or None
+        if not track.get("has_records") and self._period in ("today", "week"):
+            return 0.0
+        return (track.get(self._period) or {}).get("km")
 
     @property
     def extra_state_attributes(self) -> dict:
-        return {
-            "cloud_recorded": bool(
-                _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
-            ),
-            "note": "云端无骑行记录，累计里程请参考本地估算实体",
-        }
+        track = self._track
+        attrs: dict[str, Any] = {"source": "雅迪云端轨迹统计"}
+        if self._period == "today":
+            today = track.get("today") or {}
+            attrs["rides"] = today.get("rides")
+            attrs["minutes"] = today.get("minutes")
+            attrs["max_speed"] = today.get("max_speed")
+            attrs["segments"] = today.get("segments") or []
+        elif self._period == "week":
+            monday = dt_util.now(CN_TZ).date() - timedelta(
+                days=dt_util.now(CN_TZ).date().weekday()
+            )
+            attrs["week_start"] = monday.isoformat()
+            attrs["days"] = [
+                d for d in (track.get("days") or []) if d.get("date", "") >= monday.isoformat()
+            ]
+        elif self._period == "month":
+            attrs["rides"] = (track.get("month") or {}).get("rides")
+            attrs["days"] = (track.get("days") or [])[:31]
+        else:
+            total = track.get("total") or {}
+            attrs["co2_kg"] = total.get("co2")
+            attrs["kg_per_km"] = total.get("kg_per_km")
+        return attrs
+
+
+class YadeaTrackCountSensor(YadeaEntity):
+    """今日骑行次数。"""
+
+    _attr_icon = "mdi:bike-fast"
+    _attr_translation_key = "today_rides"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "today_rides")
+
+    @property
+    def native_value(self) -> int | None:
+        today = self._track.get("today")
+        return today.get("rides") if today is not None else None
+
+
+class YadeaTodayRideTimeSensor(YadeaEntity):
+    """今日骑行时长（分钟）。"""
+
+    _attr_device_class = SensorDeviceClass.DURATION
+    _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_native_unit_of_measurement = UnitOfTime.MINUTES
+    _attr_icon = "mdi:timer-outline"
+    _attr_translation_key = "today_ride_time"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "today_ride_time")
+
+    @property
+    def native_value(self) -> int | None:
+        today = self._track.get("today")
+        return today.get("minutes") if today is not None else None
 
 
 class YadeaTotalCO2Sensor(YadeaEntity):
@@ -325,121 +365,169 @@ class YadeaTotalCO2Sensor(YadeaEntity):
 
     @property
     def native_value(self) -> float | None:
-        value = _to_float((self._extras.get("total") or {}).get("totalCO2"))
-        return value if value else None
+        value = (self._track.get("total") or {}).get("co2")
+        return value or None
 
     @property
     def extra_state_attributes(self) -> dict:
-        stats = self._extras.get("total") or {}
+        total = self._track.get("total") or {}
         return {
-            "kg_per_km": stats.get("kgPerKm"),
-            "cloud_recorded": bool(_to_float(stats.get("totalCO2"))),
+            "kg_per_km": total.get("kg_per_km"),
+            "account_mileage": total.get("km"),
         }
 
 
-class YadeaDailyMileageSensor(YadeaEntity):
-    """Daily ride mileage over the last 7 days (diagnostic).
+class YadeaLastRideSensor(YadeaEntity):
+    """最近一次骑行的开始时间。"""
 
-    Cloud ride records only exist when rides were tracked in the app;
-    otherwise the list stays empty and the sensor reports unknown.
-    """
+    _attr_device_class = SensorDeviceClass.TIMESTAMP
+    _attr_icon = "mdi:history"
+    _attr_translation_key = "last_ride_time"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "last_ride_time")
+
+    @property
+    def native_value(self) -> datetime | None:
+        dt = _parse_cn_time((self._track.get("last_ride") or {}).get("start"))
+        return dt_util.as_utc(dt) if dt else None
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        ride = self._track.get("last_ride") or {}
+        return {
+            "end": ride.get("end"),
+            "km": ride.get("km"),
+            "minutes": ride.get("minutes"),
+            "avg_speed": ride.get("avg_speed"),
+            "max_speed": ride.get("max_speed"),
+            "consume_power": ride.get("power"),
+            "route_from": ride.get("route_from"),
+            "route_to": ride.get("route_to"),
+            "gps_points": ride.get("gps_points"),
+        }
+
+
+class YadeaLastRideDetailSensor(YadeaEntity):
+    """最近一次骑行的里程 / 时长 / 极速 / 路线。"""
+
+    _attr_icon = "mdi:bike"
+
+    _FIELDS = {
+        "mileage": ("last_ride_distance", "mdi:map-marker-path", SensorDeviceClass.DISTANCE,
+                    UnitOfLength.KILOMETERS, SensorStateClass.MEASUREMENT),
+        "duration": ("last_ride_duration", "mdi:timer-sand", SensorDeviceClass.DURATION,
+                     UnitOfTime.MINUTES, SensorStateClass.MEASUREMENT),
+        "max_speed": ("last_ride_max_speed", "mdi:speedometer", None,
+                      UnitOfLength.KILOMETERS + "/h", SensorStateClass.MEASUREMENT),
+    }
+
+    def __init__(
+        self, coordinator: YadeaCoordinator, vin: str, bike: dict, field: str
+    ) -> None:
+        key, icon, device_class, unit, state_class = self._FIELDS[field]
+        super().__init__(coordinator, vin, bike, key)
+        self._field = field
+        self._attr_translation_key = key
+        self._attr_icon = icon
+        self._attr_device_class = device_class
+        self._attr_native_unit_of_measurement = unit
+        self._attr_state_class = state_class
+
+    @property
+    def native_value(self) -> float | None:
+        ride = self._track.get("last_ride") or {}
+        if self._field == "mileage":
+            return ride.get("km")
+        if self._field == "duration":
+            return ride.get("minutes")
+        return ride.get("max_speed")
+
+
+class YadeaLastRideRouteSensor(YadeaEntity):
+    """最近一次骑行的起终点地址。"""
+
+    _attr_icon = "mdi:map-marker-radius"
+    _attr_translation_key = "last_ride_route"
+
+    def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        super().__init__(coordinator, vin, bike, "last_ride_route")
+
+    @property
+    def native_value(self) -> str | None:
+        ride = self._track.get("last_ride") or {}
+        start, end = ride.get("route_from"), ride.get("route_to")
+        if not start and not end:
+            return None
+        return f"{start or '未知'} → {end or '未知'}"
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        ride = self._track.get("last_ride") or {}
+        return {
+            "route_from": ride.get("route_from"),
+            "route_to": ride.get("route_to"),
+            "start": ride.get("start"),
+            "end": ride.get("end"),
+        }
+
+
+class YadeaDailyTracksSensor(YadeaEntity):
+    """近 30 天每日骑行汇总（诊断用，明细放属性）。"""
 
     _attr_entity_category = EntityCategory.DIAGNOSTIC
     _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
     _attr_icon = "mdi:calendar-clock"
-    _attr_translation_key = "daily_mileage"
+    _attr_translation_key = "daily_tracks"
 
     def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
+        # 沿用 1.x 的 daily_mileage key，避免升级后实体 ID 漂移
         super().__init__(coordinator, vin, bike, "daily_mileage")
 
-    @staticmethod
-    def _extract(records: list[dict]) -> list[dict]:
-        """Normalize server records into {date, km} pairs (best effort)."""
-        days: list[dict] = []
-        for r in records:
-            if not isinstance(r, dict):
-                continue
-            day = km = None
-            for key, value in r.items():
-                lower = key.lower()
-                if day is None and (
-                    "start" in lower or "day" in lower or "date" in lower
-                ):
-                    day = value
-                if km is None and "mileage" in lower:
-                    km = _to_float(value)
-            days.append({"date": day, "km": km})
-        return days
-
     @property
     def native_value(self) -> float | None:
-        records = self._extras.get("daily_mileage") or []
-        if not records:
+        days = self._track.get("days") or []
+        if not days:
             return None
-        total = sum(
-            km for d in self._extract(records) if (km := d.get("km")) is not None
-        )
-        return round(total, 2)
+        return round(sum(d.get("km") or 0 for d in days[:7]), 2)
 
     @property
     def extra_state_attributes(self) -> dict:
-        records = self._extras.get("daily_mileage") or []
-        return {"last_7_days": self._extract(records), "record_count": len(records)}
+        return {
+            "days": self._track.get("days") or [],
+            "last_7_days_km": self.native_value,
+            "source": "雅迪云端轨迹统计",
+        }
 
 
-class YadeaEstimatedMileageSensor(YadeaEntity):
-    """Ride distance estimated locally from the remaining-range decrease.
+class YadeaDailyPowerSensor(YadeaEntity):
+    """Latest daily power record (charge / consume)."""
 
-    雅迪云端不为这些车型生成骑行记录，里程只能由 mileage.MileageTracker
-    按 remMileage 的下降量累计得出，故单独成一组实体。
-    """
+    _attr_device_class = SensorDeviceClass.ENERGY
+    _attr_state_class = SensorStateClass.TOTAL
+    _attr_native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
 
-    _attr_device_class = SensorDeviceClass.DISTANCE
-    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
-    _attr_icon = "mdi:map-marker-distance"
-
-    _PERIODS = {
-        "today": ("estimated_mileage_today", SensorStateClass.MEASUREMENT),
-        "week": ("estimated_mileage_week", SensorStateClass.MEASUREMENT),
-        "month": ("estimated_mileage_month", SensorStateClass.MEASUREMENT),
-        "total": ("estimated_mileage_total", SensorStateClass.TOTAL_INCREASING),
-    }
-
-    def __init__(
-        self, coordinator: YadeaCoordinator, vin: str, bike: dict, period: str
-    ) -> None:
-        super().__init__(coordinator, vin, bike, f"estimated_mileage_{period}")
-        self._period = period
-        self._attr_translation_key, self._attr_state_class = self._PERIODS[period]
-
-    @property
-    def _stats(self) -> dict:
-        tracker = getattr(self.coordinator, "mileage", None)
-        if tracker is None:
-            return {}
-        return tracker.stats(self.vin, dt_util.now())
+    def __init__(self, coordinator, vin: str, bike: dict, kind: str) -> None:
+        super().__init__(coordinator, vin, bike, f"daily_power_{kind}")
+        self._kind = kind  # "charge" | "consume"
+        self._attr_translation_key = (
+            "daily_charge" if kind == "charge" else "daily_consume"
+        )
 
     @property
     def native_value(self) -> float | None:
-        stats = self._stats
-        if not stats.get("has_samples"):
-            return None  # 还没有采样基准，显示 unknown 而不是 0
-        return stats.get(self._period)
+        power = self._extras.get("power") or {}
+        key = "powerCharge" if self._kind == "charge" else "powerConsume"
+        return _to_float(power.get(key))
 
     @property
     def extra_state_attributes(self) -> dict:
-        stats = self._stats
-        attrs = {"source": "本地估算：续航下降量累计"}
-        if stats.get("last_soc") is not None:
-            attrs["last_soc"] = stats["last_soc"]
-            attrs["last_range"] = stats["last_range"]
-        if self._period in ("week", "month", "total"):
-            attrs["last_7_days"] = stats.get("last_7_days") or []
-        return attrs
+        power = self._extras.get("power") or {}
+        return {"record_date": power.get("recordDate")}
 
 
 class YadeaWeeklyPowerSensor(YadeaEntity):
-    """Rolling 7-day charge / consumption sum (kWh)."""
+    """Rolling 7-day charge / consumption sum."""
 
     _attr_device_class = SensorDeviceClass.ENERGY
     _attr_state_class = SensorStateClass.TOTAL
@@ -500,14 +588,21 @@ async def async_setup_entry(
                 YadeaIotDaysSensor(coordinator, vin, bike),
                 YadeaIotExpireSensor(coordinator, vin, bike),
                 YadeaVehicleInfoSensor(coordinator, vin, bike),
-                YadeaMonthMileageSensor(coordinator, vin, bike),
-                YadeaTotalMileageSensor(coordinator, vin, bike),
+                # 云端轨迹/里程
+                YadeaMileageSensor(coordinator, vin, bike, "today"),
+                YadeaMileageSensor(coordinator, vin, bike, "week"),
+                YadeaMileageSensor(coordinator, vin, bike, "month"),
+                YadeaMileageSensor(coordinator, vin, bike, "total"),
+                YadeaTrackCountSensor(coordinator, vin, bike),
+                YadeaTodayRideTimeSensor(coordinator, vin, bike),
                 YadeaTotalCO2Sensor(coordinator, vin, bike),
-                YadeaDailyMileageSensor(coordinator, vin, bike),
-                YadeaEstimatedMileageSensor(coordinator, vin, bike, "today"),
-                YadeaEstimatedMileageSensor(coordinator, vin, bike, "week"),
-                YadeaEstimatedMileageSensor(coordinator, vin, bike, "month"),
-                YadeaEstimatedMileageSensor(coordinator, vin, bike, "total"),
+                YadeaLastRideSensor(coordinator, vin, bike),
+                YadeaLastRideDetailSensor(coordinator, vin, bike, "mileage"),
+                YadeaLastRideDetailSensor(coordinator, vin, bike, "duration"),
+                YadeaLastRideDetailSensor(coordinator, vin, bike, "max_speed"),
+                YadeaLastRideRouteSensor(coordinator, vin, bike),
+                YadeaDailyTracksSensor(coordinator, vin, bike),
+                # 用电
                 YadeaDailyPowerSensor(coordinator, vin, bike, "charge"),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "consume"),
                 YadeaWeeklyPowerSensor(coordinator, vin, bike, "charge"),

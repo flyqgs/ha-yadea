@@ -3,7 +3,22 @@
     "step": {
       "user": {
         "title": "雅迪智行账号",
-        "description": "输入雅迪智行 App 的手机号和密码（与 App 登录一致）",
+        "description": "输入雅迪智行 App 的手机号和密码（与 App 登录一致）。注意：雅迪单会话，登录会让手机 App 掉线一次。",
+        "data": {
+          "account": "手机号",
+          "password": "密码"
+        }
+      },
+      "reauth_confirm": {
+        "title": "重新授权雅迪智行",
+        "description": "账号 {account} 的登录凭证已失效（通常是手机 App 重新登录把 token 顶掉了）。输入密码重新登录；这一步会让手机 App 掉线。",
+        "data": {
+          "password": "密码"
+        }
+      },
+      "reconfigure": {
+        "title": "修改雅迪智行账号",
+        "description": "重新登录并更新账号信息",
         "data": {
           "account": "手机号",
           "password": "密码"
@@ -15,7 +30,10 @@
       "cannot_connect": "无法连接雅迪云端，请稍后重试"
     },
     "abort": {
-      "already_configured": "该账号已配置"
+      "already_configured": "该账号已配置",
+      "reauth_successful": "重新授权成功",
+      "reauth_failed": "重新授权失败",
+      "reconfigure_successful": "账号已更新"
     }
   },
   "options": {
@@ -23,8 +41,13 @@
       "init": {
         "title": "Yadea 选项",
         "data": {
-          "scan_interval": "轮询间隔（秒，30-600）"
-        }
+          "scan_interval": "车辆状态轮询间隔（秒，30-600）",
+          "track_interval": "轨迹/里程刷新间隔（秒，60-3600）",
+          "auto_relogin": "token 失效时自动重新登录（会让手机 App 掉线）",
+          "account": "换账号（留空则不修改）",
+          "password": "密码（留空则不修改）"
+        },
+        "description": "雅迪单会话：换账号会重新登录，手机 App 会被顶下线。轨迹/里程只在车主账号下可见。"
       }
     }
   },
@@ -51,6 +74,12 @@
       "vehicle_info": {
         "name": "车辆信息"
       },
+      "today_mileage": {
+        "name": "今日里程"
+      },
+      "week_mileage": {
+        "name": "本周里程"
+      },
       "month_mileage": {
         "name": "本月里程"
       },
@@ -60,8 +89,29 @@
       "total_co2": {
         "name": "累计碳减排"
       },
-      "daily_mileage": {
-        "name": "近7天每日里程"
+      "today_rides": {
+        "name": "今日骑行次数"
+      },
+      "today_ride_time": {
+        "name": "今日骑行时长"
+      },
+      "last_ride_time": {
+        "name": "最近一次骑行"
+      },
+      "last_ride_distance": {
+        "name": "最近一次骑行里程"
+      },
+      "last_ride_duration": {
+        "name": "最近一次骑行时长"
+      },
+      "last_ride_max_speed": {
+        "name": "最近一次骑行极速"
+      },
+      "last_ride_route": {
+        "name": "最近一次骑行路线"
+      },
+      "daily_tracks": {
+        "name": "近 7 天里程明细"
       },
       "daily_consume": {
         "name": "昨日用电"
@@ -74,18 +124,6 @@
       },
       "weekly_charge": {
         "name": "近7天充电"
-      },
-      "estimated_mileage_today": {
-        "name": "今日里程（估算）"
-      },
-      "estimated_mileage_week": {
-        "name": "近 7 天里程（估算）"
-      },
-      "estimated_mileage_month": {
-        "name": "本月里程（估算）"
-      },
-      "estimated_mileage_total": {
-        "name": "累计里程（估算）"
       }
     },
     "image": {

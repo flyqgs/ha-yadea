@@ -10,3 +10,4 @@ gen_dark_views.py
 merge_dark_views.py
 fix_pro_view.py
 deploy_live.py
+update_track_view.py

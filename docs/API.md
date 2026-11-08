@@ -56,29 +56,39 @@
 | `/vehicle-base/track-ride-meter/current-month/mileage` | GET | `{vin}` |
 | `/batt-power-record/statistics/page` | POST | `{current, size, vin}` |
 
-### 里程数据实测结论（2026-11-08）
+### 里程数据实测结论（2026-11-08 修正）
 
-对车辆快照之外所有可能带里程的接口做了穷举实测（主账号 `primaryUser=true`
-与家人共享账号各测一次、7/30/365 天区间、smartType 0/2/7 全组合）：
+> **重要修正（2026-11-08 二次实测）**：此前所有 `track-ride*` 接口报
+> 「车架号不存在 / 数据不存在」**不是云端没数据，而是我们的调用方式错了**。
+> H5 请求拦截器（chunk-common 模块 6500）在签名后执行
+> `e.params = undefined; e.data = undefined` —— **参数只放在 gatewaySign 里，
+> URL 上不能带 query，POST 也不能带 body**。
+> 同时带 query + 签名时，网关读到错组合，所有 `/vehicle-base/*` 接口都会失败。
+> 改为纯签名调用后，车主账号下轨迹数据完整返回（见下文「骑行轨迹接口」）。
+> 另：轨迹/里程按**账号**归属，家人共享账号（`primaryUser=false`）查询一律为空。
 
-| 接口 | 实测结果 |
+#### 骑行轨迹接口（车主账号可用）
+
+| 接口 | 方法 | 参数 | 说明 |
+|---|---|---|---|
+| `/vehicle-base/track-ride-detail/page-list` | GET | `{vin, metricType:0, current, size, type:1}` | 按天分组的骑行轨迹，`records[].trackRideQueryVOList` 为分段（起止时间/里程/均速/极速/耗电/CO2）；每页约 7 天，翻页边界会重复返回同一天，需按日期去重 |
+| `/vehicle-base/track-ride/summary` | GET | `{vin, metricType:0, type:1日/2周/3月, startDate, endDate, smartType:2}` | 日/周/月聚合：`rideCount/totalMileage/totalTrackTime/averageSpeed/maxSpeed/totalPower` |
+| `/vehicle-base/track-ride/calc/co2` | GET | `{vin, metricType:0}` | `{accountMileage, totalCO2, kgPerKm}` —— App 首页的「累计总里程 / 减碳」 |
+| `/vehicle-base/track-ride-detail/lon-lat` | GET | `{id, type:1}` | 某段轨迹的 GPS 点（经纬度 + 部分点带 `beginAddress/endAddress` 地址） |
+| `/vehicle-base/track-ride-meter-detail/page-list` | GET | `{vin, metricType, current, size, type:2}` | 仪表盘轨迹（部分车型恒为 0） |
+
+### 历史结论存档（调用方式错误时 observed，仅作参考）
+
+| 接口 | 当时实测结果 |
 |---|---|
 | `track-ride-meter/summary`（type=1/2/3） | `[]`（查询成功但无记录） |
-| `track-ride-meter/current-month/mileage` | `data: null` |
-| `track-ride-meter/total-mileage/calc/co2` | `{"totalCO2":0.0,"kgPerKm":0.18,"vehicleTotalMileage":0}` |
-| `track-ride-meter-detail/page-list`（`{vin,type,startDate,endDate,current,size}`） | `160002 请求数据不存在`（参数被接受，表中无数据） |
-| `track-ride/summary`（`{vin,type,startDate,endDate}`） | `200000 车架号不存在`（该车的骑行汇总表无记录；字段名确认为 `vin`） |
-| `track-ride-detail/page-list` | 同上 |
-| `bikeBatteryAndMileage/queryBikeBatteryAndMileage` | `records: [], total: 0` |
-| `bikeCycleData/queryBikeCycleDataPage` | `total: 0` |
-| `vehicle-base/battery-charge-record` | `{}` |
-| `vehicle-base/track-ride/per-power/consumer` | 仅返回 `{"count":10}` |
+| `track-ride-meter/current-month/mileage` | `data: null`（接口已废弃） |
+| `track-ride-meter/total-mileage/calc/co2` | `{"totalCO2":0.0,"kgPerKm":0.18,"vehicleTotalMileage":0}`（仪表口径，多数车型无数据） |
+| `track-ride/summary` | `200000 车架号不存在`（实为签名/参数双发所致） |
 | `vehiclebase/estimateMileage/cal2`（POST `{vin,soc1}`） | `{"formula":2,"estimateMileage":<remMileage>}`，即剩余续航 |
 
-**结论**：这类车型的里程统计完全依赖"骑行记录（track-ride）"入库，
-而云端从未为其生成记录；车辆快照 43 个字段中也只有 `remMileage`
-（剩余续航），没有任何 odometer 字段。因此 HA 集成按快照中
-`remMileage` 的下降量在本地累计里程（见 `mileage.py`）。
+**结论（v2.0.0）**：里程/轨迹使用云端骑行记录（车主账号），不再做本地估算。
+共享账号下查询恒为空属正常现象（数据按账号归属）。
 
 成功响应 `code: "000000"`，业务数据在 `data` 中（部分接口返回 AES 加密体，
 用同一密钥解密后为 `gatewayTimestamp=...&json=...` 格式）。

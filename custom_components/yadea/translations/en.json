@@ -3,7 +3,22 @@
     "step": {
       "user": {
         "title": "Yadea account",
-        "description": "Enter the phone number and password used in the Yadea Smart app",
+        "description": "Enter the phone number and password used in the Yadea Smart app. Note: Yadea allows a single active session, so signing in here logs the mobile app out once.",
+        "data": {
+          "account": "Phone number",
+          "password": "Password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authorize Yadea",
+        "description": "The stored credential for {account} is no longer valid (usually because the mobile app signed in again). Enter the password to sign in; this logs the mobile app out.",
+        "data": {
+          "password": "Password"
+        }
+      },
+      "reconfigure": {
+        "title": "Update Yadea account",
+        "description": "Sign in again and update the account details",
         "data": {
           "account": "Phone number",
           "password": "Password"
@@ -15,7 +30,10 @@
       "cannot_connect": "Cannot connect to the Yadea cloud, try again later"
     },
     "abort": {
-      "already_configured": "Account already configured"
+      "already_configured": "Account already configured",
+      "reauth_successful": "Re-authorization successful",
+      "reauth_failed": "Re-authorization failed",
+      "reconfigure_successful": "Account updated"
     }
   },
   "options": {
@@ -23,8 +41,13 @@
       "init": {
         "title": "Yadea options",
         "data": {
-          "scan_interval": "Polling interval (seconds, 30-600)"
-        }
+          "scan_interval": "Vehicle status polling interval (seconds, 30-600)",
+          "track_interval": "Track/mileage refresh interval (seconds, 60-3600)",
+          "auto_relogin": "Sign in automatically when the token expires (logs the mobile app out)",
+          "account": "Switch account (leave empty to keep)",
+          "password": "Password (leave empty to keep)"
+        },
+        "description": "Yadea allows one active session: signing in logs the mobile app out. Ride tracks are only visible to the vehicle owner account."
       }
     }
   },
@@ -51,6 +74,12 @@
       "vehicle_info": {
         "name": "Vehicle info"
       },
+      "today_mileage": {
+        "name": "Today mileage"
+      },
+      "week_mileage": {
+        "name": "This week mileage"
+      },
       "month_mileage": {
         "name": "Mileage this month"
       },
@@ -60,7 +89,28 @@
       "total_co2": {
         "name": "Total CO2 saved"
       },
-      "daily_mileage": {
+      "today_rides": {
+        "name": "Today rides"
+      },
+      "today_ride_time": {
+        "name": "Today ride time"
+      },
+      "last_ride_time": {
+        "name": "Last ride"
+      },
+      "last_ride_distance": {
+        "name": "Last ride distance"
+      },
+      "last_ride_duration": {
+        "name": "Last ride duration"
+      },
+      "last_ride_max_speed": {
+        "name": "Last ride max speed"
+      },
+      "last_ride_route": {
+        "name": "Last ride route"
+      },
+      "daily_tracks": {
         "name": "Daily mileage (7-day)"
       },
       "daily_consume": {
@@ -74,18 +124,6 @@
       },
       "weekly_charge": {
         "name": "7-day charge"
-      },
-      "estimated_mileage_today": {
-        "name": "Estimated distance today"
-      },
-      "estimated_mileage_week": {
-        "name": "Estimated distance (7 days)"
-      },
-      "estimated_mileage_month": {
-        "name": "Estimated distance this month"
-      },
-      "estimated_mileage_total": {
-        "name": "Estimated odometer"
       }
     },
     "image": {
