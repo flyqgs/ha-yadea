@@ -2271,35 +2271,6 @@ views:
           td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
 
           h1 { color: #f97316 !important; font-size: 40px !important; margin: 4px 0 8px !important; }
-    - type: markdown
-      content: |-
-        {% set segs = state_attr('sensor.long_ting_70_y_g_today_mileage', 'segments') or [] %}
-        ### 今日分段 · 龙霆70
-
-        {% if segs | count == 0 %}
-        今天还没有骑行记录。
-        {% else %}
-        | 出发 | 结束 | 里程 | 时长 | 极速 |
-        | --- | --- | --- | --- | --- |
-        {% for s in segs %}| {{ s.start[11:16] }} | {{ s.end[11:16] }} | {{ s.km }} km | {{ s.minutes }} 分 | {{ s.max_speed }} km/h |
-        {% endfor %}
-        {% endif %}
-      card_mod:
-        style: |-
-          ha-card {
-            background: rgba(17,24,39,0.72) !important;
-            border: 1px solid rgba(148,163,184,0.16) !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
-            color: #e2e8f0 !important;
-          }
-          .card-content { color: #e2e8f0 !important; }
-          table { width: 100%; border-collapse: collapse; font-size: 13px; }
-          th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
-               border-bottom: 1px solid rgba(148,163,184,0.22); }
-          td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
-
-          h3 { color: #f97316 !important; margin: 2px 0 8px !important; font-size: 14px !important; }
     - type: heading
       heading: 近 14 天里程 · 龙霆70
       icon: mdi:chart-bar
@@ -2407,6 +2378,35 @@ views:
           th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
                border-bottom: 1px solid rgba(148,163,184,0.22); }
           td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
+    - type: markdown
+      content: |-
+        {% set segs = state_attr('sensor.long_ting_70_y_g_today_mileage', 'segments') or [] %}
+        ### 今日分段 · 龙霆70
+
+        {% if segs | count == 0 %}
+        今天还没有骑行记录。
+        {% else %}
+        | 出发 | 结束 | 里程 | 时长 | 极速 |
+        | --- | --- | --- | --- | --- |
+        {% for s in segs %}| {{ s.start[11:16] }} | {{ s.end[11:16] }} | {{ s.km }} km | {{ s.minutes }} 分 | {{ s.max_speed }} km/h |
+        {% endfor %}
+        {% endif %}
+      card_mod:
+        style: |-
+          ha-card {
+            background: rgba(17,24,39,0.72) !important;
+            border: 1px solid rgba(148,163,184,0.16) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
+            color: #e2e8f0 !important;
+          }
+          .card-content { color: #e2e8f0 !important; }
+          table { width: 100%; border-collapse: collapse; font-size: 13px; }
+          th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
+               border-bottom: 1px solid rgba(148,163,184,0.22); }
+          td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
+
+          h3 { color: #f97316 !important; margin: 2px 0 8px !important; font-size: 14px !important; }
   - type: grid
     cards:
     - type: custom:mushroom-template-card
@@ -2470,35 +2470,6 @@ views:
           td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
 
           h1 { color: #38bdf8 !important; font-size: 40px !important; margin: 4px 0 8px !important; }
-    - type: markdown
-      content: |-
-        {% set segs = state_attr('sensor.bai_sha_ii_g_today_mileage', 'segments') or [] %}
-        ### 今日分段 · 白鲨Ⅱ
-
-        {% if segs | count == 0 %}
-        今天还没有骑行记录。
-        {% else %}
-        | 出发 | 结束 | 里程 | 时长 | 极速 |
-        | --- | --- | --- | --- | --- |
-        {% for s in segs %}| {{ s.start[11:16] }} | {{ s.end[11:16] }} | {{ s.km }} km | {{ s.minutes }} 分 | {{ s.max_speed }} km/h |
-        {% endfor %}
-        {% endif %}
-      card_mod:
-        style: |-
-          ha-card {
-            background: rgba(17,24,39,0.72) !important;
-            border: 1px solid rgba(148,163,184,0.16) !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
-            color: #e2e8f0 !important;
-          }
-          .card-content { color: #e2e8f0 !important; }
-          table { width: 100%; border-collapse: collapse; font-size: 13px; }
-          th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
-               border-bottom: 1px solid rgba(148,163,184,0.22); }
-          td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
-
-          h3 { color: #38bdf8 !important; margin: 2px 0 8px !important; font-size: 14px !important; }
     - type: heading
       heading: 近 14 天里程 · 白鲨Ⅱ
       icon: mdi:chart-bar
@@ -2606,3 +2577,32 @@ views:
           th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
                border-bottom: 1px solid rgba(148,163,184,0.22); }
           td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
+    - type: markdown
+      content: |-
+        {% set segs = state_attr('sensor.bai_sha_ii_g_today_mileage', 'segments') or [] %}
+        ### 今日分段 · 白鲨Ⅱ
+
+        {% if segs | count == 0 %}
+        今天还没有骑行记录。
+        {% else %}
+        | 出发 | 结束 | 里程 | 时长 | 极速 |
+        | --- | --- | --- | --- | --- |
+        {% for s in segs %}| {{ s.start[11:16] }} | {{ s.end[11:16] }} | {{ s.km }} km | {{ s.minutes }} 分 | {{ s.max_speed }} km/h |
+        {% endfor %}
+        {% endif %}
+      card_mod:
+        style: |-
+          ha-card {
+            background: rgba(17,24,39,0.72) !important;
+            border: 1px solid rgba(148,163,184,0.16) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
+            color: #e2e8f0 !important;
+          }
+          .card-content { color: #e2e8f0 !important; }
+          table { width: 100%; border-collapse: collapse; font-size: 13px; }
+          th { color: #94a3b8; font-weight: 600; text-align: left; padding: 4px 6px;
+               border-bottom: 1px solid rgba(148,163,184,0.22); }
+          td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
+
+          h3 { color: #38bdf8 !important; margin: 2px 0 8px !important; font-size: 14px !important; }
