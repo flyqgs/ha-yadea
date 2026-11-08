@@ -8,9 +8,11 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+import homeassistant.util.dt as dt_util
 
 from .api import YadeaApi, YadeaAuthError, YadeaError
 from .const import CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL, DOMAIN
+from .mileage import MileageTracker
 
 LOGGER = logging.getLogger(__package__)
 
@@ -19,6 +21,7 @@ class YadeaCoordinator(DataUpdateCoordinator[dict]):
     """Poll the Yadea cloud for all bound vehicles."""
 
     api: YadeaApi
+    mileage: MileageTracker | None = None
 
     def __init__(
         self,
@@ -41,8 +44,13 @@ class YadeaCoordinator(DataUpdateCoordinator[dict]):
 
     async def _async_update_data(self) -> dict:
         try:
-            return await self.api.get_bike_data()
+            data = await self.api.get_bike_data()
         except YadeaAuthError as err:
             raise ConfigEntryAuthFailed(str(err)) from err
         except YadeaError as err:
             raise UpdateFailed(str(err)) from err
+
+        # 云端没有骑行记录，里程只能靠续航下降量在本地累计
+        if self.mileage is not None:
+            self.mileage.update(data.get("bikes") or [], dt_util.now())
+        return data

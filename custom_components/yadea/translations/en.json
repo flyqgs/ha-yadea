@@ -30,24 +30,68 @@
   },
   "entity": {
     "sensor": {
-      "battery": {"name": "Battery"},
-      "range": {"name": "Remaining range"},
-      "last_report": {"name": "Last report"},
-      "battery_count": {"name": "Battery count"},
-      "iot_days": {"name": "IoT days remaining"},
-      "iot_expire": {"name": "IoT card expires"},
-      "vehicle_info": {"name": "Vehicle info"},
-      "month_mileage": {"name": "Mileage this month"},
-      "total_mileage": {"name": "Total mileage"},
-      "total_co2": {"name": "Total CO2 saved"},
-      "daily_mileage": {"name": "Daily mileage (7-day)"},
-      "daily_consume": {"name": "Yesterday consumption"},
-      "daily_charge": {"name": "Yesterday charge"},
-      "weekly_consume": {"name": "7-day consumption"},
-      "weekly_charge": {"name": "7-day charge"}
+      "battery": {
+        "name": "Battery"
+      },
+      "range": {
+        "name": "Remaining range"
+      },
+      "last_report": {
+        "name": "Last report"
+      },
+      "battery_count": {
+        "name": "Battery count"
+      },
+      "iot_days": {
+        "name": "IoT days remaining"
+      },
+      "iot_expire": {
+        "name": "IoT card expires"
+      },
+      "vehicle_info": {
+        "name": "Vehicle info"
+      },
+      "month_mileage": {
+        "name": "Mileage this month"
+      },
+      "total_mileage": {
+        "name": "Total mileage"
+      },
+      "total_co2": {
+        "name": "Total CO2 saved"
+      },
+      "daily_mileage": {
+        "name": "Daily mileage (7-day)"
+      },
+      "daily_consume": {
+        "name": "Yesterday consumption"
+      },
+      "daily_charge": {
+        "name": "Yesterday charge"
+      },
+      "weekly_consume": {
+        "name": "7-day consumption"
+      },
+      "weekly_charge": {
+        "name": "7-day charge"
+      },
+      "estimated_mileage_today": {
+        "name": "Estimated distance today"
+      },
+      "estimated_mileage_week": {
+        "name": "Estimated distance (7 days)"
+      },
+      "estimated_mileage_month": {
+        "name": "Estimated distance this month"
+      },
+      "estimated_mileage_total": {
+        "name": "Estimated odometer"
+      }
     },
     "image": {
-      "vehicle_image": {"name": "Vehicle picture"}
+      "vehicle_image": {
+        "name": "Vehicle picture"
+      }
     }
   }
 }

@@ -16,6 +16,7 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
+    PERCENTAGE,
     EntityCategory,
     UnitOfEnergy,
     UnitOfLength,
@@ -113,6 +114,7 @@ class YadeaBatterySensor(YadeaEntity):
 
     _attr_device_class = SensorDeviceClass.BATTERY
     _attr_state_class = SensorStateClass.MEASUREMENT
+    _attr_native_unit_of_measurement = PERCENTAGE
     _attr_translation_key = "battery"
 
     def __init__(self, coordinator: YadeaCoordinator, vin: str, bike: dict) -> None:
@@ -296,7 +298,18 @@ class YadeaTotalMileageSensor(YadeaEntity):
 
     @property
     def native_value(self) -> float | None:
-        return _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
+        value = _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
+        # 这些车型云端不生成骑行记录，接口恒返回 0；0 不能当作真实累计里程
+        return value if value else None
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        return {
+            "cloud_recorded": bool(
+                _to_float((self._extras.get("total") or {}).get("vehicleTotalMileage"))
+            ),
+            "note": "云端无骑行记录，累计里程请参考本地估算实体",
+        }
 
 
 class YadeaTotalCO2Sensor(YadeaEntity):
@@ -312,12 +325,16 @@ class YadeaTotalCO2Sensor(YadeaEntity):
 
     @property
     def native_value(self) -> float | None:
-        return _to_float((self._extras.get("total") or {}).get("totalCO2"))
+        value = _to_float((self._extras.get("total") or {}).get("totalCO2"))
+        return value if value else None
 
     @property
     def extra_state_attributes(self) -> dict:
         stats = self._extras.get("total") or {}
-        return {"kg_per_km": stats.get("kgPerKm")}
+        return {
+            "kg_per_km": stats.get("kgPerKm"),
+            "cloud_recorded": bool(_to_float(stats.get("totalCO2"))),
+        }
 
 
 class YadeaDailyMileageSensor(YadeaEntity):
@@ -368,6 +385,57 @@ class YadeaDailyMileageSensor(YadeaEntity):
     def extra_state_attributes(self) -> dict:
         records = self._extras.get("daily_mileage") or []
         return {"last_7_days": self._extract(records), "record_count": len(records)}
+
+
+class YadeaEstimatedMileageSensor(YadeaEntity):
+    """Ride distance estimated locally from the remaining-range decrease.
+
+    雅迪云端不为这些车型生成骑行记录，里程只能由 mileage.MileageTracker
+    按 remMileage 的下降量累计得出，故单独成一组实体。
+    """
+
+    _attr_device_class = SensorDeviceClass.DISTANCE
+    _attr_native_unit_of_measurement = UnitOfLength.KILOMETERS
+    _attr_icon = "mdi:map-marker-distance"
+
+    _PERIODS = {
+        "today": ("estimated_mileage_today", SensorStateClass.MEASUREMENT),
+        "week": ("estimated_mileage_week", SensorStateClass.MEASUREMENT),
+        "month": ("estimated_mileage_month", SensorStateClass.MEASUREMENT),
+        "total": ("estimated_mileage_total", SensorStateClass.TOTAL_INCREASING),
+    }
+
+    def __init__(
+        self, coordinator: YadeaCoordinator, vin: str, bike: dict, period: str
+    ) -> None:
+        super().__init__(coordinator, vin, bike, f"estimated_mileage_{period}")
+        self._period = period
+        self._attr_translation_key, self._attr_state_class = self._PERIODS[period]
+
+    @property
+    def _stats(self) -> dict:
+        tracker = getattr(self.coordinator, "mileage", None)
+        if tracker is None:
+            return {}
+        return tracker.stats(self.vin, dt_util.now())
+
+    @property
+    def native_value(self) -> float | None:
+        stats = self._stats
+        if not stats.get("has_samples"):
+            return None  # 还没有采样基准，显示 unknown 而不是 0
+        return stats.get(self._period)
+
+    @property
+    def extra_state_attributes(self) -> dict:
+        stats = self._stats
+        attrs = {"source": "本地估算：续航下降量累计"}
+        if stats.get("last_soc") is not None:
+            attrs["last_soc"] = stats["last_soc"]
+            attrs["last_range"] = stats["last_range"]
+        if self._period in ("week", "month", "total"):
+            attrs["last_7_days"] = stats.get("last_7_days") or []
+        return attrs
 
 
 class YadeaWeeklyPowerSensor(YadeaEntity):
@@ -436,6 +504,10 @@ async def async_setup_entry(
                 YadeaTotalMileageSensor(coordinator, vin, bike),
                 YadeaTotalCO2Sensor(coordinator, vin, bike),
                 YadeaDailyMileageSensor(coordinator, vin, bike),
+                YadeaEstimatedMileageSensor(coordinator, vin, bike, "today"),
+                YadeaEstimatedMileageSensor(coordinator, vin, bike, "week"),
+                YadeaEstimatedMileageSensor(coordinator, vin, bike, "month"),
+                YadeaEstimatedMileageSensor(coordinator, vin, bike, "total"),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "charge"),
                 YadeaDailyPowerSensor(coordinator, vin, bike, "consume"),
                 YadeaWeeklyPowerSensor(coordinator, vin, bike, "charge"),

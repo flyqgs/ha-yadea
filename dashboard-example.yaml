@@ -1,5 +1,6 @@
 # 雅迪智行 · Home Assistant 仪表盘示例（5 视图统一深色主题）
-# 依赖：card-mod；旗舰版另需 apexcharts-card、bar-card 与 mushroom（HACS）
+# 依赖：card-mod + mushroom + apexcharts-card + bar-card（仅部分卡需要）
+# 里程为集成 v1.5.0 起的本地估算实体（sensor.*_estimated_distance_* / *_estimated_odometer）
 # 用法：复制到「设置 → 仪表盘 → 添加仪表盘 → YAML 模式」，替换实体 ID 前缀即可
 title: 雅迪电动车
 views:
@@ -81,7 +82,7 @@ views:
     - type: horizontal-stack
       cards:
       - type: entity
-        entity: sensor.bai_sha_ii_g_mileage_this_month
+        entity: sensor.bai_sha_ii_g_estimated_distance_this_month
         name: 本月 (km)
         card_mod:
           style: |-
@@ -98,7 +99,7 @@ views:
               overflow: hidden;
             }
       - type: entity
-        entity: sensor.bai_sha_ii_g_total_mileage
+        entity: sensor.bai_sha_ii_g_estimated_odometer
         name: 累计 (km)
         card_mod:
           style: |-
@@ -233,7 +234,7 @@ views:
     - type: horizontal-stack
       cards:
       - type: entity
-        entity: sensor.long_ting_70_y_g_mileage_this_month
+        entity: sensor.long_ting_70_y_g_estimated_distance_this_month
         name: 本月 (km)
         card_mod:
           style: |-
@@ -250,7 +251,7 @@ views:
               overflow: hidden;
             }
       - type: entity
-        entity: sensor.long_ting_70_y_g_total_mileage
+        entity: sensor.long_ting_70_y_g_estimated_odometer
         name: 累计 (km)
         card_mod:
           style: |-
@@ -395,7 +396,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.bai_sha_ii_g_mileage_this_month
+        entity: sensor.bai_sha_ii_g_estimated_distance_this_month
         prefix: '本月 '
         style:
           color: '#e2e8f0'
@@ -411,7 +412,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.bai_sha_ii_g_total_mileage
+        entity: sensor.bai_sha_ii_g_estimated_odometer
         prefix: '累计 '
         style:
           color: '#e2e8f0'
@@ -493,14 +494,14 @@ views:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: sensor.bai_sha_ii_g_mileage_this_month
+        entity: sensor.bai_sha_ii_g_estimated_distance_this_month
         name: 本月里程
         icon: mdi:road-variant
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
-        entity: sensor.bai_sha_ii_g_total_mileage
-        name: 累计里程
+        entity: sensor.bai_sha_ii_g_estimated_odometer
+        name: 累计里程 · 自 11-08 起
         icon: mdi:counter
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
@@ -514,7 +515,7 @@ views:
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
-        entity: sensor.bai_sha_ii_g_daily_mileage_7_day
+        entity: sensor.bai_sha_ii_g_estimated_distance_7_days
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
@@ -566,7 +567,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.long_ting_70_y_g_mileage_this_month
+        entity: sensor.long_ting_70_y_g_estimated_distance_this_month
         prefix: '本月 '
         style:
           color: '#e2e8f0'
@@ -582,7 +583,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.long_ting_70_y_g_total_mileage
+        entity: sensor.long_ting_70_y_g_estimated_odometer
         prefix: '累计 '
         style:
           color: '#e2e8f0'
@@ -664,14 +665,14 @@ views:
     - type: horizontal-stack
       cards:
       - type: tile
-        entity: sensor.long_ting_70_y_g_mileage_this_month
+        entity: sensor.long_ting_70_y_g_estimated_distance_this_month
         name: 本月里程
         icon: mdi:road-variant
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
-        entity: sensor.long_ting_70_y_g_total_mileage
-        name: 累计里程
+        entity: sensor.long_ting_70_y_g_estimated_odometer
+        name: 累计里程 · 自 11-08 起
         icon: mdi:counter
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
@@ -685,7 +686,7 @@ views:
         card_mod:
           style: 'ha-card { --ha-card-background: linear-gradient(158deg, rgba(18,27,45,0.94) 0%, rgba(9,14,26,0.96) 100%); --primary-text-color: #f1f5f9; --secondary-text-color: #94a3b8; border: 1px solid rgba(120,160,255,0.10); border-radius: 18px; box-shadow: 0 8px 22px rgba(2,6,23,0.35); }'
       - type: tile
-        entity: sensor.long_ting_70_y_g_daily_mileage_7_day
+        entity: sensor.long_ting_70_y_g_estimated_distance_7_days
         name: 近7天骑行
         icon: mdi:bike-fast
         color: teal
@@ -813,7 +814,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.bai_sha_ii_g_mileage_this_month
+        entity: sensor.bai_sha_ii_g_estimated_distance_this_month
         prefix: '本月 '
         style:
           color: '#e2e8f0'
@@ -829,7 +830,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.bai_sha_ii_g_total_mileage
+        entity: sensor.bai_sha_ii_g_estimated_odometer
         prefix: '累计 '
         style:
           color: '#e2e8f0'
@@ -915,7 +916,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.long_ting_70_y_g_mileage_this_month
+        entity: sensor.long_ting_70_y_g_estimated_distance_this_month
         prefix: '本月 '
         style:
           color: '#e2e8f0'
@@ -931,7 +932,7 @@ views:
           left: 2%
           transform: translate(0, -50%)
       - type: state-label
-        entity: sensor.long_ting_70_y_g_total_mileage
+        entity: sensor.long_ting_70_y_g_estimated_odometer
         prefix: '累计 '
         style:
           color: '#e2e8f0'
@@ -1048,10 +1049,10 @@ views:
       - type: template
         icon: mdi:road-variant
         icon_color: purple
-        content: 本月 {{ states('sensor.bai_sha_ii_g_mileage_this_month') }} km
+        content: 本月 {{ states('sensor.bai_sha_ii_g_estimated_distance_this_month') }} km
         tap_action:
           action: more-info
-          entity: sensor.bai_sha_ii_g_mileage_this_month
+          entity: sensor.bai_sha_ii_g_estimated_distance_this_month
       - type: template
         icon: mdi:leaf
         icon_color: light-green
@@ -1225,10 +1226,10 @@ views:
       - type: template
         icon: mdi:road-variant
         icon_color: purple
-        content: 本月 {{ states('sensor.long_ting_70_y_g_mileage_this_month') }} km
+        content: 本月 {{ states('sensor.long_ting_70_y_g_estimated_distance_this_month') }} km
         tap_action:
           action: more-info
-          entity: sensor.long_ting_70_y_g_mileage_this_month
+          entity: sensor.long_ting_70_y_g_estimated_distance_this_month
       - type: template
         icon: mdi:leaf
         icon_color: light-green
@@ -1351,7 +1352,7 @@ views:
   - type: grid
     cards:
     - type: markdown
-      content: "**YADEA · SMART MOTO**  \n**白鲨Ⅱ-G PRO**\n\n# {{ (states('sensor.bai_sha_ii_g_battery') if states('sensor.bai_sha_ii_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.bai_sha_ii_g_remaining_range') if states('sensor.bai_sha_ii_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.bai_sha_ii_g_battery_count') if states('sensor.bai_sha_ii_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.bai_sha_ii_g_mileage_this_month') if states('sensor.bai_sha_ii_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.bai_sha_ii_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
+      content: "**YADEA · SMART MOTO**  \n**白鲨Ⅱ-G PRO**\n\n# {{ (states('sensor.bai_sha_ii_g_battery') if states('sensor.bai_sha_ii_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.bai_sha_ii_g_remaining_range') if states('sensor.bai_sha_ii_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.bai_sha_ii_g_battery_count') if states('sensor.bai_sha_ii_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.bai_sha_ii_g_estimated_distance_this_month') if states('sensor.bai_sha_ii_g_estimated_distance_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.bai_sha_ii_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
       card_mod:
         style:
           .: |
@@ -1418,7 +1419,7 @@ views:
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.bai_sha_ii_g_mileage_this_month'') if states(''sensor.bai_sha_ii_g_mileage_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        primary: '{{ (states(''sensor.bai_sha_ii_g_estimated_distance_this_month'') if states(''sensor.bai_sha_ii_g_estimated_distance_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
         secondary: 本月里程
         icon: mdi:map-marker-distance
         icon_color: '#38bdf8'
@@ -1444,8 +1445,8 @@ views:
               overflow: hidden;
             }
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.bai_sha_ii_g_total_mileage'') if states(''sensor.bai_sha_ii_g_total_mileage'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
-        secondary: 累计里程
+        primary: '{{ (states(''sensor.bai_sha_ii_g_estimated_odometer'') if states(''sensor.bai_sha_ii_g_estimated_odometer'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        secondary: 累计里程 · 自 11-08 起
         icon: mdi:road-variant
         icon_color: '#60a5fa'
         multiline_secondary: false
@@ -1472,8 +1473,8 @@ views:
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.bai_sha_ii_g_total_co2_saved'') if states(''sensor.bai_sha_ii_g_total_co2_saved'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} kg'
-        secondary: 累计碳减排
+        primary: '{% set km = states(''sensor.bai_sha_ii_g_estimated_odometer'') %}{% if km in (''unknown'',''unavailable'',''None'') %}—{% else %}{{ (km|float(0)*0.18)|round(1) }}{% endif %} kg'
+        secondary: 累计碳减排 · 0.18 kg/km
         icon: mdi:leaf
         icon_color: '#22c55e'
         multiline_secondary: false
@@ -1498,7 +1499,7 @@ views:
               overflow: hidden;
             }
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.bai_sha_ii_g_daily_mileage_7_day'') if states(''sensor.bai_sha_ii_g_daily_mileage_7_day'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        primary: '{{ (states(''sensor.bai_sha_ii_g_estimated_distance_7_days'') if states(''sensor.bai_sha_ii_g_estimated_distance_7_days'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
         secondary: 近 7 天骑行
         icon: mdi:bike-fast
         icon_color: '#f59e0b'
@@ -1549,7 +1550,7 @@ views:
       show:
         loading: false
       series:
-      - entity: sensor.bai_sha_ii_g_daily_mileage_7_day
+      - entity: sensor.bai_sha_ii_g_estimated_distance_7_days
         type: column
         name: 每日里程
         color: '#38bdf8'
@@ -1589,7 +1590,7 @@ views:
         tooltip:
           theme: dark
         noData:
-          text: 暂无骑行记录 · App 端上传后自动显示
+          text: 暂无骑行数据 · 骑行后自动累计
           align: center
           style:
             color: '#94a3b8'
@@ -1656,7 +1657,7 @@ views:
             overflow: hidden;
           }
     - type: custom:mushroom-template-card
-      primary: '{{ (states(''sensor.bai_sha_ii_g_mileage_this_month'') if states(''sensor.bai_sha_ii_g_mileage_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km · {{ (states(''sensor.long_ting_70_y_g_mileage_this_month'') if states(''sensor.long_ting_70_y_g_mileage_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+      primary: '{{ (states(''sensor.bai_sha_ii_g_estimated_distance_this_month'') if states(''sensor.bai_sha_ii_g_estimated_distance_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km · {{ (states(''sensor.long_ting_70_y_g_estimated_distance_this_month'') if states(''sensor.long_ting_70_y_g_estimated_distance_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
       secondary: 本月里程 · 白鲨Ⅱ / 龙霆70
       icon: mdi:map-marker-distance
       icon_color: '#38bdf8'
@@ -1682,7 +1683,7 @@ views:
             overflow: hidden;
           }
     - type: custom:mushroom-template-card
-      primary: '{{ (states(''sensor.bai_sha_ii_g_total_mileage'') if states(''sensor.bai_sha_ii_g_total_mileage'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km · {{ (states(''sensor.long_ting_70_y_g_total_mileage'') if states(''sensor.long_ting_70_y_g_total_mileage'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+      primary: '{{ (states(''sensor.bai_sha_ii_g_estimated_odometer'') if states(''sensor.bai_sha_ii_g_estimated_odometer'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km · {{ (states(''sensor.long_ting_70_y_g_estimated_odometer'') if states(''sensor.long_ting_70_y_g_estimated_odometer'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
       secondary: 累计里程 · 白鲨Ⅱ / 龙霆70
       icon: mdi:road-variant
       icon_color: '#60a5fa'
@@ -1757,7 +1758,7 @@ views:
   - type: grid
     cards:
     - type: markdown
-      content: "**YADEA · SMART MOTO**  \n**冠能龙霆70**\n\n# {{ (states('sensor.long_ting_70_y_g_battery') if states('sensor.long_ting_70_y_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.long_ting_70_y_g_remaining_range') if states('sensor.long_ting_70_y_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.long_ting_70_y_g_battery_count') if states('sensor.long_ting_70_y_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.long_ting_70_y_g_mileage_this_month') if states('sensor.long_ting_70_y_g_mileage_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.long_ting_70_y_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
+      content: "**YADEA · SMART MOTO**  \n**冠能龙霆70**\n\n# {{ (states('sensor.long_ting_70_y_g_battery') if states('sensor.long_ting_70_y_g_battery') not in ('unknown', 'unavailable', 'None') else '—') }}%\n\n**续航 {{ (states('sensor.long_ting_70_y_g_remaining_range') if states('sensor.long_ting_70_y_g_remaining_range') not in ('unknown', 'unavailable', 'None') else '—') }} km**\n\n电池 {{ (states('sensor.long_ting_70_y_g_battery_count') if states('sensor.long_ting_70_y_g_battery_count') not in ('unknown', 'unavailable', 'None') else '—') }} 组 · 本月 {{ (states('sensor.long_ting_70_y_g_estimated_distance_this_month') if states('sensor.long_ting_70_y_g_estimated_distance_this_month') not in ('unknown', 'unavailable', 'None') else '—') }} km · 上报 {% set ts = as_timestamp(states('sensor.long_ting_70_y_g_last_report')) %}{% if ts > 0 %}{% set d = (as_timestamp(now()) - ts) | int %}{% if d < 3600 %}{{ (d // 60) }} 分钟前{% elif d < 86400 %}{{ (d // 3600) }} 小时前{% else %}{{ (d // 86400) }} 天前{% endif %}{% else %}—{% endif %}\n"
       card_mod:
         style:
           .: |
@@ -1824,7 +1825,7 @@ views:
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.long_ting_70_y_g_mileage_this_month'') if states(''sensor.long_ting_70_y_g_mileage_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        primary: '{{ (states(''sensor.long_ting_70_y_g_estimated_distance_this_month'') if states(''sensor.long_ting_70_y_g_estimated_distance_this_month'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
         secondary: 本月里程
         icon: mdi:map-marker-distance
         icon_color: '#38bdf8'
@@ -1850,8 +1851,8 @@ views:
               overflow: hidden;
             }
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.long_ting_70_y_g_total_mileage'') if states(''sensor.long_ting_70_y_g_total_mileage'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
-        secondary: 累计里程
+        primary: '{{ (states(''sensor.long_ting_70_y_g_estimated_odometer'') if states(''sensor.long_ting_70_y_g_estimated_odometer'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        secondary: 累计里程 · 自 11-08 起
         icon: mdi:road-variant
         icon_color: '#60a5fa'
         multiline_secondary: false
@@ -1878,8 +1879,8 @@ views:
     - type: horizontal-stack
       cards:
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.long_ting_70_y_g_total_co2_saved'') if states(''sensor.long_ting_70_y_g_total_co2_saved'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} kg'
-        secondary: 累计碳减排
+        primary: '{% set km = states(''sensor.long_ting_70_y_g_estimated_odometer'') %}{% if km in (''unknown'',''unavailable'',''None'') %}—{% else %}{{ (km|float(0)*0.18)|round(1) }}{% endif %} kg'
+        secondary: 累计碳减排 · 0.18 kg/km
         icon: mdi:leaf
         icon_color: '#22c55e'
         multiline_secondary: false
@@ -1904,7 +1905,7 @@ views:
               overflow: hidden;
             }
       - type: custom:mushroom-template-card
-        primary: '{{ (states(''sensor.long_ting_70_y_g_daily_mileage_7_day'') if states(''sensor.long_ting_70_y_g_daily_mileage_7_day'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
+        primary: '{{ (states(''sensor.long_ting_70_y_g_estimated_distance_7_days'') if states(''sensor.long_ting_70_y_g_estimated_distance_7_days'') not in (''unknown'', ''unavailable'', ''None'') else ''—'') }} km'
         secondary: 近 7 天骑行
         icon: mdi:bike-fast
         icon_color: '#f59e0b'
@@ -1955,7 +1956,7 @@ views:
       show:
         loading: false
       series:
-      - entity: sensor.long_ting_70_y_g_daily_mileage_7_day
+      - entity: sensor.long_ting_70_y_g_estimated_distance_7_days
         type: column
         name: 每日里程
         color: '#60a5fa'
@@ -1995,7 +1996,7 @@ views:
         tooltip:
           theme: dark
         noData:
-          text: 暂无骑行记录 · App 端上传后自动显示
+          text: 暂无骑行数据 · 骑行后自动累计
           align: center
           style:
             color: '#94a3b8'
@@ -2177,8 +2178,8 @@ views:
       content: |
         - 数据源为雅迪云端快照，默认 **60 秒** 轮询，仅读取不写入车辆。
         - 电量配色：<20% 红 · 20–50% 琥珀 · ≥50% 绿。
-        - 里程与能耗需 App 端骑行记录上传，云端无记录时显示占位 “—”。
-        - “近 7 天骑行”读取每日里程实体的 last_7_days 属性，无数据时图表为空。
+        - 里程为**本地估算**：按剩余续航下降量累计，自 2026-11-08 起统计（雅迪云端不生成这两台车的骑行记录）。
+        - 碳减排按 0.18 kg/km 由估算里程折算；“近 7 天骑行”读取近 7 天里程实体的 last_7_days 属性。
       card_mod:
         style: |-
           ha-card {

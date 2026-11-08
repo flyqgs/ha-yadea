@@ -24,10 +24,21 @@
 | 物联卡剩余天数 (iot_days) | 4G 卡到期天数 | 快照 `iotExpireDays` |
 | 物联卡到期日 (iot_expire) | 到期日期 | 快照 `iotCardExpireTime` |
 | 车辆信息 (vehicle_info) | 诊断实体：型号/颜色/MAC/蓝牙名/ICCID/绑定日期/保修等属性 | 车辆快照 |
-| 本月里程 (month_mileage) | km | 里程统计接口 |
-| 累计里程 (total_mileage) | km | `total-mileage/calc/co2` |
+| 本月里程 (month_mileage) | km，云端无骑行记录的车型恒为 unknown | `track-ride-meter/current-month/mileage` |
+| 累计里程 (total_mileage) | km，云端无骑行记录的车型恒为 unknown | `total-mileage/calc/co2` |
 | 累计碳减排 (total_co2) | kg（附 kgPerKm 属性） | `total-mileage/calc/co2` |
 | 近7天每日里程 (daily_mileage) | 诊断实体，7 天合计 km + 逐日列表属性 | `track-ride-meter/summary type=1`（仅 App 记录过骑行才有数据） |
+| **今日里程·估算** (estimated_distance_today) | km，按剩余续航下降量本地累计 | 集成本地计算 |
+| **近7天里程·估算** (estimated_distance_7_days) | km，附 last_7_days 逐日属性 | 集成本地计算 |
+| **本月里程·估算** (estimated_distance_this_month) | km | 集成本地计算 |
+| **累计里程·估算** (estimated_odometer) | km，重启不丢失（.storage 持久化） | 集成本地计算 |
+
+> **里程数据说明**：实测雅迪云端对部分车型**不生成骑行记录**
+> （所有 `track-ride*` 接口返回空、`vehicleTotalMileage` 恒为 0，
+> 详见 [docs/API.md](docs/API.md)），因此云端里程实体永远为空。
+> 集成 v1.5.0 起按「剩余续航下降量」在 HA 本地累计里程并按日分桶持久化：
+> 充电不计入、温度漂移互相抵消、HA 停机超 6 小时不补算，误差约 ±10%。
+> 碳减排（仪表盘）按 0.18 kg/km 由估算里程折算。
 
 此外每台车还有一个 **图片实体 (image)**：车辆官方车型图（`imgUrl`），
 可直接用于仪表盘的图片卡片。

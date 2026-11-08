@@ -12,6 +12,7 @@ from homeassistant.helpers.storage import Store
 from .api import YadeaApi, YadeaAuthError, YadeaError
 from .const import CONF_ACCOUNT, CONF_PASSWORD, DOMAIN, PLATFORMS
 from .coordinator import YadeaCoordinator
+from .mileage import MileageTracker
 
 LOGGER = logging.getLogger(__package__)
 
@@ -42,6 +43,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         raise ConfigEntryNotReady(str(err)) from err
 
     coordinator = YadeaCoordinator(hass, entry, api)
+
+    # 云端不产生骑行记录，里程按续航下降量本地累计（见 mileage.py）
+    tracker = MileageTracker(hass, entry.entry_id)
+    await tracker.async_load()
+    coordinator.mileage = tracker
+
     await coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = coordinator

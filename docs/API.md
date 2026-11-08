@@ -56,6 +56,30 @@
 | `/vehicle-base/track-ride-meter/current-month/mileage` | GET | `{vin}` |
 | `/batt-power-record/statistics/page` | POST | `{current, size, vin}` |
 
+### 里程数据实测结论（2026-11-08）
+
+对车辆快照之外所有可能带里程的接口做了穷举实测（主账号 `primaryUser=true`
+与家人共享账号各测一次、7/30/365 天区间、smartType 0/2/7 全组合）：
+
+| 接口 | 实测结果 |
+|---|---|
+| `track-ride-meter/summary`（type=1/2/3） | `[]`（查询成功但无记录） |
+| `track-ride-meter/current-month/mileage` | `data: null` |
+| `track-ride-meter/total-mileage/calc/co2` | `{"totalCO2":0.0,"kgPerKm":0.18,"vehicleTotalMileage":0}` |
+| `track-ride-meter-detail/page-list`（`{vin,type,startDate,endDate,current,size}`） | `160002 请求数据不存在`（参数被接受，表中无数据） |
+| `track-ride/summary`（`{vin,type,startDate,endDate}`） | `200000 车架号不存在`（该车的骑行汇总表无记录；字段名确认为 `vin`） |
+| `track-ride-detail/page-list` | 同上 |
+| `bikeBatteryAndMileage/queryBikeBatteryAndMileage` | `records: [], total: 0` |
+| `bikeCycleData/queryBikeCycleDataPage` | `total: 0` |
+| `vehicle-base/battery-charge-record` | `{}` |
+| `vehicle-base/track-ride/per-power/consumer` | 仅返回 `{"count":10}` |
+| `vehiclebase/estimateMileage/cal2`（POST `{vin,soc1}`） | `{"formula":2,"estimateMileage":<remMileage>}`，即剩余续航 |
+
+**结论**：这类车型的里程统计完全依赖"骑行记录（track-ride）"入库，
+而云端从未为其生成记录；车辆快照 43 个字段中也只有 `remMileage`
+（剩余续航），没有任何 odometer 字段。因此 HA 集成按快照中
+`remMileage` 的下降量在本地累计里程（见 `mileage.py`）。
+
 成功响应 `code: "000000"`，业务数据在 `data` 中（部分接口返回 AES 加密体，
 用同一密钥解密后为 `gatewayTimestamp=...&json=...` 格式）。
 
