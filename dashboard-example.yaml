@@ -2211,6 +2211,7 @@ views:
   - type: grid
     cards:
     - type: custom:mushroom-template-card
+      grid_columns: 2
       primary: 最近一次 · 龙霆70
       secondary: '{% set t = states(''sensor.long_ting_70_y_g_last_ride'') %}{% if t in (''unknown'',''unavailable'',''None'') %}暂无记录{% else %}{{ (as_timestamp(t) | timestamp_custom(''%m-%d %H:%M'', true)) }} · {{ states(''sensor.long_ting_70_y_g_last_ride_distance'') }} km · {{ states(''sensor.long_ting_70_y_g_last_ride_duration'') }} 分 · 极速 {{ states(''sensor.long_ting_70_y_g_last_ride_max_speed'') }} km/h{% endif %}'
       multiline_secondary: true
@@ -2228,26 +2229,6 @@ views:
             border-radius: 14px !important;
             box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
           }
-    - type: custom:mushroom-template-card
-      primary: 最近一次 · 白鲨Ⅱ
-      secondary: '{% set t = states(''sensor.bai_sha_ii_g_last_ride'') %}{% if t in (''unknown'',''unavailable'',''None'') %}暂无记录{% else %}{{ (as_timestamp(t) | timestamp_custom(''%m-%d %H:%M'', true)) }} · {{ states(''sensor.bai_sha_ii_g_last_ride_distance'') }} km · {{ states(''sensor.bai_sha_ii_g_last_ride_duration'') }} 分 · 极速 {{ states(''sensor.bai_sha_ii_g_last_ride_max_speed'') }} km/h{% endif %}'
-      multiline_secondary: true
-      icon: mdi:bike-fast
-      icon_color: '#38bdf8'
-      tap_action:
-        action: none
-      card_mod:
-        style: |-
-          ha-card {
-            --primary-text-color: #f1f5f9;
-            --secondary-text-color: #94a3b8;
-            background: rgba(17,24,39,0.72) !important;
-            border: 1px solid rgba(148,163,184,0.16) !important;
-            border-radius: 14px !important;
-            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
-          }
-  - type: grid
-    cards:
     - type: heading
       heading: 今日骑行 · 龙霆70
       icon: mdi:map-marker-distance
@@ -2428,6 +2409,25 @@ views:
           td { padding: 5px 6px; border-bottom: 1px solid rgba(148,163,184,0.10); }
   - type: grid
     cards:
+    - type: custom:mushroom-template-card
+      grid_columns: 2
+      primary: 最近一次 · 白鲨Ⅱ
+      secondary: '{% set t = states(''sensor.bai_sha_ii_g_last_ride'') %}{% if t in (''unknown'',''unavailable'',''None'') %}暂无记录{% else %}{{ (as_timestamp(t) | timestamp_custom(''%m-%d %H:%M'', true)) }} · {{ states(''sensor.bai_sha_ii_g_last_ride_distance'') }} km · {{ states(''sensor.bai_sha_ii_g_last_ride_duration'') }} 分 · 极速 {{ states(''sensor.bai_sha_ii_g_last_ride_max_speed'') }} km/h{% endif %}'
+      multiline_secondary: true
+      icon: mdi:bike-fast
+      icon_color: '#38bdf8'
+      tap_action:
+        action: none
+      card_mod:
+        style: |-
+          ha-card {
+            --primary-text-color: #f1f5f9;
+            --secondary-text-color: #94a3b8;
+            background: rgba(17,24,39,0.72) !important;
+            border: 1px solid rgba(148,163,184,0.16) !important;
+            border-radius: 14px !important;
+            box-shadow: 0 8px 24px rgba(2,6,23,0.45) !important;
+          }
     - type: heading
       heading: 今日骑行 · 白鲨Ⅱ
       icon: mdi:map-marker-distance
