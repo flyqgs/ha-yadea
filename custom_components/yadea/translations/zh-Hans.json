@@ -130,6 +130,11 @@
       "vehicle_image": {
         "name": "车辆图片"
       }
+    },
+    "device_tracker": {
+      "last_location": {
+        "name": "最后位置"
+      }
     }
   }
 }

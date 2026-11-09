@@ -36,6 +36,7 @@
 | 最近一次骑行 (last_ride) | 开始时间，附里程/时长/极速/起终点地址属性 | `track-ride-detail/page-list` |
 | 最近一次骑行里程 / 时长 / 极速 (last_ride_*) | km / 分 / km/h | 同上 |
 | 最近一次骑行路线 (last_ride_route) | 起终点地址文本 | `track-ride-detail/lon-lat` |
+| **最后位置** (device_tracker) | 最近一次骑行终点的经纬度 + 地址，可上地图 | `track-ride-detail/lon-lat` |
 | 近 7 天里程明细 (daily_mileage) | 诊断实体，7 天合计 + 逐日属性（含 31 天） | `track-ride/summary` |
 | 昨日用电 / 充电 / 近 7 天用电 / 充电 | kWh | `batt-power-record/statistics/page` |
 
@@ -82,9 +83,20 @@
   会被顶下线）。
 - 「选项」里还可以直接**换账号**（填写新的手机号/密码），entry 与实体 ID 都不会变。
 
+### 车辆位置
+
+云端**没有实时定位接口**（`bikeRealStatus/getVehRealStatus` 在车辆休眠时返回空，
+车辆熄火后不上报坐标）。因此集成提供的是**最近一次骑行结束时的停车位置**：
+
+- 取最近一段轨迹的最后一个 GPS 点，生成 `device_tracker.<车辆>_最后位置`
+- 状态为 `home` / `not_home`（按 `zone.home` 半径判断），属性含 `latitude` /
+  `longitude` / `address`（地址文本）/ `location_time` / `ride_id`
+- 地图卡片可直接添加该实体；车辆骑行中会随轨迹刷新（默认 5 分钟）更新
+
 ### 暂不支持
 
-- ❌ 实时 GPS 定位：轨迹接口只提供**历史骑行**的 GPS 点（`lon-lat`），无实时位置
+- ❌ **实时** GPS 定位：云端只在骑行过程中记录轨迹点，熄火后不再上报，
+  故只能取到"最后一次停车位置"而非当前位置
 - ❌ 控制（锁车/解锁/寻车）：涉及指令签名，尚未逆向
 
 ## 安装

@@ -351,6 +351,7 @@ class YadeaApi:
         segments.sort(key=lambda s: str(s.get("startTime") or ""), reverse=True)
 
         last_ride: dict[str, Any] = {}
+        location: dict[str, Any] = {}
         if segments:
             seg = segments[0]
             last_ride = {
@@ -373,6 +374,21 @@ class YadeaApi:
                 last_ride["route_from"] = start_addr
                 last_ride["route_to"] = end_addr
                 last_ride["gps_points"] = len(gps)
+
+                # 最后一个 GPS 点 = 本次骑行结束时的停车位置（云端无实时定位接口，
+                # 车辆休眠不上报坐标，只能取最近一段轨迹的末点）
+                pts = sorted(gps, key=lambda p: str(p.get("sortTime") or p.get("createTime") or ""))
+                tail = pts[-1]
+                lat = _f(tail.get("latitude"))
+                lon = _f(tail.get("longitude"))
+                if lat is not None and lon is not None:
+                    location = {
+                        "latitude": lat,
+                        "longitude": lon,
+                        "address": end_addr or tail.get("endAddress") or start_addr,
+                        "time": tail.get("sortTime") or tail.get("createTime") or last_ride.get("end"),
+                        "ride_id": seg.get("id"),
+                    }
 
         return {
             "today": {
@@ -404,6 +420,7 @@ class YadeaApi:
                 "kg_per_km": _f(total.get("kgPerKm")),
             },
             "last_ride": last_ride,
+            "location": location,
             "days": [per_day[k] for k in sorted(per_day, reverse=True)][:31],
             "has_records": bool(per_day),
         }
